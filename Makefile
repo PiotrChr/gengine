@@ -48,3 +48,6 @@ build-deb_x64:
 
 # install-deb_x64:
 # 	${CMAKE_DEB} --install ${TARGET_DEB}
+
+qs:
+	git add -A && git commit -m "sync" && git push HEAD
