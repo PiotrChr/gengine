@@ -10,7 +10,7 @@ if(TARGET_MAC)
     set(CMAKE_XCODE_ATTRIBUTE_FRAMEWORK_SEARCH_PATHS frameworks)
     set(CMAKE_MODULE_PATH cmake/mac_x64/)
 elseif(TARGET_DEB)
-    set(CMAKE_MODULE_PATH cmake/deb_x64/)
+    set(CMAKE_MODULE_PATH lib/deb_x64/SFML/)
 elseif(TARGET_RASP_ARM)
     set(CMAKE_MODULE_PATH cmake/deb_rasp_arm/)
 
