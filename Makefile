@@ -1,4 +1,4 @@
-BUILD_FOLDER:=/Users/piotrchrusciel/Documents/work.nosync/gengine/build
+BUILD_FOLDER:=./build
 CMAKE_MAC:=/usr/local/bin/cmake
 CMAKE_DEB:=/usr/bin/cmake
 TARGET_MAC:=-DTARGET_MAC=True
