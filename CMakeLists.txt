@@ -16,7 +16,7 @@ elseif(TARGET_RASP_ARM)
 
 endif()
 
-message(CMAKE_MODULE_PATH)
+message($CMAKE_MODULE_PATH)
 
 #find_package(OpenGL REQUIRED)
 find_package(SFML 2.5 COMPONENTS system window graphics network audio REQUIRED)
