@@ -39,7 +39,7 @@ add_executable(
 if(TARGET_MAC)
     target_link_libraries(GEngine "-framework sfml-graphics -framework sfml-system -framework sfml-window")
 elseif(TARGET_DEB)
-    target_link_libraries(GEngine "lsfml-graphics lsfml-system sfml-window")
+    target_link_libraries(GEngine "-l sfml-graphics -l sfml-system -l sfml-window")
 elseif(TARGET_RASP_ARM)
     target_link_libraries(GEngine "lsfml-graphics lsfml-system lsfml-window")    
 endif()
