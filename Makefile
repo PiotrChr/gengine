@@ -50,4 +50,4 @@ build-deb_x64:
 # 	${CMAKE_DEB} --install ${TARGET_DEB}
 
 qs:
-	git add -A && git commit -m "sync" && git origin push origin HEAD
+	git add -A && git commit -m "sync" && git push origin HEAD
