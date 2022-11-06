@@ -1,21 +1,41 @@
-cmake_minimum_required(VERSION 3.23)
+cmake_minimum_required(VERSION 3.22)
 project(GEngine)
 
+if(NOT TARGET_DEB OR NOT TARGET_MAC OR NOT TARGET_RASP_ARM)
+    set(TARGET_DEB)
+endif()
+
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_XCODE_ATTRIBUTE_FRAMEWORK_SEARCH_PATHS frameworks)
-set(CMAKE_MODULE_PATH cmake/)
+if(TARGET_MAC)
+    include_directories(include/mac_x64/)
+    link_directories(lib/mac_x64/)
+elseif(TARGET_DEB)
+    include_directories(include/deb_x64/)
+    link_directories(lib/deb_x64/)
+elseif(TARGET_RASP_ARM)
+    set(CMAKE_MODULE_PATH cmake/deb_rasp_arm/)
+else()
+    message("Target is not set")
+endif()
 
-#find_package(OpenGL REQUIRED)
-find_package(SFML 2.5 COMPONENTS system window graphics network audio REQUIRED)
+# if(TARGET_MAC)
+#     find_package(SFML 2.5 COMPONENTS system window graphics network audio REQUIRED)
+# endif()
 
-include_directories("includes")
+if(TARGET_MAC)
+    include_directories("includes/mac_x64")
+elseif(TARGET_DEB)
+    include_directories("includes/deb_x64")
+elseif(TARGET_RASP_ARM)
+    include_directories("includes/deb_rasp_arm")
+endif()
 
 add_executable(
     GEngine
     src/main.cpp
     )
 
-target_link_libraries(GEngine "-framework sfml-graphics -framework sfml-system -framework sfml-window")
+target_link_libraries(GEngine "-l sfml-graphics -l sfml-system -l sfml-window")
 
 #configure_file(resources/shaders/default.frag res/default.frag COPYONLY)
 #configure_file(resources/shaders/default.vert res/default.vert COPYONLY)
@@ -31,12 +51,10 @@ target_link_libraries(GEngine "-framework sfml-graphics -framework sfml-system -
 #    resources/shaders/gof_display.frag
 #    )
 
-
-set_target_properties(GEngine PROPERTIES LINK_FLAGS "-Wl,-F ${CMAKE_CURRENT_LIST_DIR}/frameworks/")
-
-#set_target_properties(GameOfLifeCplus PROPERTIES
-#        MACOSX_BUNDLE FALSE
-#        MACOSX_FRAMEWORK_IDENTIFIER org.cmake.ExecutableTarget
-#        )
-
-#target_link_libraries(GameOfLifeCplus "/usr/local/Cellar/glfw/3.3.8/lib/libglfw.3.3.dylib")
+if(TARGET_MAC)
+    set_target_properties(GEngine PROPERTIES LINK_FLAGS "-Wl,-F ${CMAKE_CURRENT_LIST_DIR}/frameworks/")
+elseif(TARGET_DEB)
+    # set_target_properties(GEngine PROPERTIES LINK_FLAGS "-Wl,-F ${CMAKE_CURRENT_LIST_DIR}/frameworks/")
+elseif(TARGET_RASP_ARM)
+    set_target_properties(GEngine PROPERTIES LINK_FLAGS "-Wl,-F ${CMAKE_CURRENT_LIST_DIR}/frameworks/")
+endif()
