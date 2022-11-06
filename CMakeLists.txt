@@ -1,21 +1,44 @@
 cmake_minimum_required(VERSION 3.23)
 project(GEngine)
 
+if(NOT TARGET_DEB OR NOT TARGET_MAC OR NOT TARGET_RASP_ARM)
+    set(TARGET_DEB)
+endif()
+
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_XCODE_ATTRIBUTE_FRAMEWORK_SEARCH_PATHS frameworks)
-set(CMAKE_MODULE_PATH cmake/)
+if(TARGET_MAC)
+    set(CMAKE_XCODE_ATTRIBUTE_FRAMEWORK_SEARCH_PATHS frameworks)
+    set(CMAKE_MODULE_PATH cmake/mac_x64/)
+elseif(TARGET_DEB)
+    set(CMAKE_MODULE_PATH cmake/deb_x64/)
+elseif(TARGET_RASP_ARM)
+    set(CMAKE_MODULE_PATH cmake/deb_rasp_arm/)
+
+endif()
 
 #find_package(OpenGL REQUIRED)
 find_package(SFML 2.5 COMPONENTS system window graphics network audio REQUIRED)
 
-include_directories("includes")
+if(TARGET_MAC)
+    include_directories("includes/mac_x64")
+elseif(TARGET_DEB)
+    include_directories("includes/deb_x64")
+elseif(TARGET_RASP_ARM)
+    include_directories("includes/deb_rasp_arm")
+endif()
 
 add_executable(
     GEngine
     src/main.cpp
     )
 
-target_link_libraries(GEngine "-framework sfml-graphics -framework sfml-system -framework sfml-window")
+if(TARGET_MAC)
+    target_link_libraries(GEngine "-framework sfml-graphics -framework sfml-system -framework sfml-window")
+elseif(TARGET_DEB)
+    target_link_libraries(GEngine "sfml-graphics sfml-system sfml-window")
+elseif(TARGET_RASP_ARM)
+    target_link_libraries(GEngine "sfml-graphics sfml-system sfml-window")    
+endif()
 
 #configure_file(resources/shaders/default.frag res/default.frag COPYONLY)
 #configure_file(resources/shaders/default.vert res/default.vert COPYONLY)
@@ -31,12 +54,10 @@ target_link_libraries(GEngine "-framework sfml-graphics -framework sfml-system -
 #    resources/shaders/gof_display.frag
 #    )
 
-
-set_target_properties(GEngine PROPERTIES LINK_FLAGS "-Wl,-F ${CMAKE_CURRENT_LIST_DIR}/frameworks/")
-
-#set_target_properties(GameOfLifeCplus PROPERTIES
-#        MACOSX_BUNDLE FALSE
-#        MACOSX_FRAMEWORK_IDENTIFIER org.cmake.ExecutableTarget
-#        )
-
-#target_link_libraries(GameOfLifeCplus "/usr/local/Cellar/glfw/3.3.8/lib/libglfw.3.3.dylib")
+if(TARGET_MAC)
+    set_target_properties(GEngine PROPERTIES LINK_FLAGS "-Wl,-F ${CMAKE_CURRENT_LIST_DIR}/frameworks/")
+elseif(TARGET_DEB)
+    # set_target_properties(GEngine PROPERTIES LINK_FLAGS "-Wl,-F ${CMAKE_CURRENT_LIST_DIR}/frameworks/")
+elseif(TARGET_RASP_ARM)
+    set_target_properties(GEngine PROPERTIES LINK_FLAGS "-Wl,-F ${CMAKE_CURRENT_LIST_DIR}/frameworks/")
+endif()
