@@ -19,8 +19,9 @@ else()
     message("Target is not set")
 endif()
 
-#find_package(OpenGL REQUIRED)
-find_package(SFML 2.5 COMPONENTS system window graphics network audio REQUIRED)
+if(TARGET_MAC)
+    find_package(SFML 2.5 COMPONENTS system window graphics network audio REQUIRED)
+endif()
 
 if(TARGET_MAC)
     include_directories("includes/mac_x64")
