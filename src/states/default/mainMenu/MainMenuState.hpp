@@ -2,6 +2,7 @@
 #include "../BaseState.hpp"
 #include "../../../engine/game/GameComponents.hpp"
 
+
 namespace Gengine {
     class MainMenuState : public BaseState {
     public:
@@ -15,5 +16,10 @@ namespace Gengine {
         void resume();
     private:
         sf::Sprite _background;
+        sf::Sprite _playButton;
+        sf::Sprite _playButtonOuter;
+        sf::Sprite _quitButton;
+        sf::Sprite _testButton;
+        sf::Sprite _title;
     };
 }
