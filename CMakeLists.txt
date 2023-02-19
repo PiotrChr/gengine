@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.22)
+cmake_minimum_required(VERSION 3.22)
 project(GEngine)
 
 if(NOT TARGET_DEB OR NOT TARGET_MAC OR NOT TARGET_RASP_ARM)
     set(TARGET_DEB)
 endif()
-
 set(CMAKE_CXX_STANDARD 17)
 if(TARGET_MAC)
     include_directories(include/mac_x64/)
