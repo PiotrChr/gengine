@@ -1,4 +1,9 @@
 .DS_Store
 .vscode
 
+cmake/
 build/
+include/
+frameworks/
+lib/
+resources/
