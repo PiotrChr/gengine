@@ -1,5 +1,7 @@
 #pragma once
 
-class ObjectManager {
+namespace Gengine {
+    class ObjectManager {
 
-};
+    };
+}
