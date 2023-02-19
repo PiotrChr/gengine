@@ -1,110 +1,41 @@
 cmake_minimum_required(VERSION 3.22)
+cmake_minimum_required(VERSION 3.22)
 project(GEngine)
-set(CMAKE_CXX_STANDARD 17)
 
 if(NOT TARGET_DEB OR NOT TARGET_MAC OR NOT TARGET_RASP_ARM)
     set(TARGET_DEB)
 endif()
-
-set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
-set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
-
-file(GLOB SOURCES "src/*.cpp" "src/*.h")
-
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY
-  ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY
-  ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY
-  ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
-
+set(CMAKE_CXX_STANDARD 17)
 if(TARGET_MAC)
-    set (LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/lib/mac_x64")
-    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/mac_x64/)
-    
-elseif(TARGET_WIN)
-    set (LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/lib/win_x64")
-    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/win_x64/)
-    
+    include_directories(include/mac_x64/)
+    link_directories(lib/mac_x64/)
 elseif(TARGET_DEB)
-    set (LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/lib/deb_x64")
-    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/deb_x64/)
-    
+    include_directories(include/deb_x64/)
+    link_directories(lib/deb_x64/)
 elseif(TARGET_RASP_ARM)
-    set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/deb_rasp_arm/)
+    set(CMAKE_MODULE_PATH cmake/deb_rasp_arm/)
 else()
     message("Target is not set")
 endif()
-
-link_directories(${LIB_DIR})
 
 # if(TARGET_MAC)
 #     find_package(SFML 2.5 COMPONENTS system window graphics network audio REQUIRED)
 # endif()
 
-# if(TARGET_MAC)
-#     include_directories("include/mac_x64/")
-# elseif(TARGET_DEB)
-#     include_directories("include/deb_x64/")
-# elseif(TARGET_RASP_ARM)
-#     include_directories("include/deb_rasp_arm/")
-# endif()
-
-# add_executable(GEngine ${SOURCES})
-
-add_executable(GEngine
-"src/main.cpp"
-"src/engine/DEFINITIONS.hpp"
-"src/engine/game/GameComponents.hpp"
-
-
-"src/engine/utils/window.cpp"
-"src/engine/gameManager/GameManager.cpp"
-"src/engine/game/Game.cpp"
-"src/engine/core/asset/AssetManager.cpp"
-"src/engine/core/input/InputManager.cpp"
-"src/engine/core/object/ObjectManager.cpp"
-"src/engine/core/state/State.hpp"
-"src/engine/core/state/State.cpp"
-"src/engine/core/state/StateMachine.hpp"
-"src/engine/core/state/StateMachine.cpp"
-"src/engine/core/window/WindowManager.cpp"
-"src/engine/core/world/generator/WorldGenerator.cpp"
-"src/engine/core/world/loader/WorldLoader.cpp"
-
-"src/states/default/BaseState.cpp"
-"src/states/default/splash/SplashState.cpp"
-"src/states/default/mainMenu/MainMenuState.cpp"
-)
-
-
-# target_link_libraries(GEngine ${LIBRARIES})
-
 if(TARGET_MAC)
-    target_link_libraries(GEngine "-framework CoreGraphics" "-framework Foundation")
+    include_directories("includes/mac_x64")
+elseif(TARGET_DEB)
+    include_directories("includes/deb_x64")
+elseif(TARGET_RASP_ARM)
+    include_directories("includes/deb_rasp_arm")
 endif()
 
-target_link_libraries(GEngine "-L${CMAKE_CURRENT_SOURCE_DIR}/lib/mac_x64")
-target_link_libraries(GEngine "sfml-graphics" "sfml-window" "sfml-system")
+add_executable(
+    GEngine
+    src/main.cpp
+    )
 
-install(
-    TARGETS GEngine
-    RUNTIME DESTINATION "bin"
-    LIBRARY DESTINATION "lib"
-    ARCHIVE DESTINATION "lib"
-    COMPONENT library
-)
-if (TARGET_MAC)
-    add_custom_command(TARGET GEngine POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory
-            "${PROJECT_SOURCE_DIR}/frameworks/"
-            $<TARGET_FILE_DIR:GEngine>/../Frameworks)
-endif()
-
-add_custom_command(TARGET GEngine POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "${PROJECT_SOURCE_DIR}/resources/"
-        $<TARGET_FILE_DIR:GEngine>/resources/)
+target_link_libraries(GEngine "-l sfml-graphics -l sfml-system -l sfml-window")
 
 #configure_file(resources/shaders/default.frag res/default.frag COPYONLY)
 #configure_file(resources/shaders/default.vert res/default.vert COPYONLY)
@@ -121,9 +52,9 @@ add_custom_command(TARGET GEngine POST_BUILD
 #    )
 
 if(TARGET_MAC)
-    # set_target_properties(GEngine PROPERTIES LINK_FLAGS "-Wl,-F ${CMAKE_CURRENT_LIST_DIR}/frameworks/")
+    set_target_properties(GEngine PROPERTIES LINK_FLAGS "-Wl,-F ${CMAKE_CURRENT_LIST_DIR}/frameworks/")
 elseif(TARGET_DEB)
     # set_target_properties(GEngine PROPERTIES LINK_FLAGS "-Wl,-F ${CMAKE_CURRENT_LIST_DIR}/frameworks/")
 elseif(TARGET_RASP_ARM)
-    # set_target_properties(GEngine PROPERTIES LINK_FLAGS "-Wl,-F ${CMAKE_CURRENT_LIST_DIR}/frameworks/")
+    set_target_properties(GEngine PROPERTIES LINK_FLAGS "-Wl,-F ${CMAKE_CURRENT_LIST_DIR}/frameworks/")
 endif()
