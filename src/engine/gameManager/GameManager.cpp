@@ -3,6 +3,7 @@
 namespace Gengine {
     GameManager::GameManager(GameData gameData) {
         _game = new Game(gameData, _data);
+        _settingsLoader = new SettingsLoader();
     }
 
     GameManager::GameManager() {
@@ -10,6 +11,7 @@ namespace Gengine {
     }
 
     void GameManager::init() {
+        _settingsLoader->loadSettings(_data);
         _game->init();
     }
 
@@ -22,6 +24,7 @@ namespace Gengine {
     }
 
     GameManager::~GameManager() {
+        delete _settingsLoader;
         delete _game;
     }
 }

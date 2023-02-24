@@ -1,16 +1,14 @@
 #pragma once
 
-
 #include <SFML/Graphics.hpp>
-#include "../../../engine/DEFINITIONS.hpp"
-#include "../../BaseState.hpp"
-#include "../../../engine/game/GameComponents.hpp"
+#include "../BaseState.hpp"
+#include "../../engine/DEFINITIONS.hpp"
 
 namespace Gengine {
-    class SplashState : public BaseState {
+    class BaseGameState : public BaseState {
     public:
-        SplashState(GameComponentsRef& data) : BaseState(data) {};
-        ~SplashState() {};
+        BaseGameState(GameComponentsRef& data) : BaseState(data) {};
+        ~BaseGameState() {};
         void init();
         void handleInput(sf::Event event);
         void update(float dt);

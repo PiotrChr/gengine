@@ -27,8 +27,8 @@ namespace Gengine {
     }
 
     void SplashState::draw(float dt) {
-        _data->windowManager.window.clear(sf::Color::Red);
-        _data->windowManager.window.draw(_background);
-        _data->windowManager.window.display();
+        _data->windowManager.window->clear(sf::Color::Red);
+        _data->windowManager.window->draw(_background);
+        _data->windowManager.window->display();
     }
 }

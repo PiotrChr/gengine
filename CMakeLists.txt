@@ -9,7 +9,43 @@ endif()
 set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
-file(GLOB SOURCES "src/*.cpp" "src/*.h")
+set(CUR_TARGET GEngine)
+
+file(GLOB SOURCES 
+"src/main.cpp"
+
+"src/engine/DEFINITIONS.hpp"
+"src/engine/game/GameComponents.hpp"
+
+
+"src/engine/utils/window.cpp"
+"src/engine/gameManager/GameManager.cpp"
+"src/engine/game/Game.cpp"
+"src/engine/core/audio/AudioManager.cpp"
+"src/engine/core/asset/AssetManager.cpp"
+"src/engine/core/input/InputManager.cpp"
+"src/engine/core/object/ObjectManager.cpp"
+"src/engine/core/object/InGameObject.cpp"
+"src/engine/core/state/State.hpp"
+"src/engine/core/state/State.cpp"
+"src/engine/core/state/StateMachine.cpp"
+"src/engine/core/window/WindowManager.cpp"
+"src/engine/core/world/generator/WorldGenerator.cpp"
+"src/engine/core/world/loader/WorldLoader.cpp"
+"src/engine/core/save/SaveGameManager.cpp"
+"src/engine/core/save/SettingsLoader.cpp"
+"src/engine/core/audio/AudioManager.cpp"
+
+"src/states/BaseState.cpp"
+"src/states/default/splash/SplashState.cpp"
+"src/states/default/mainMenu/MainMenuState.cpp"
+"src/states/default/quit/QuitState.cpp"
+"src/states/game/BaseGameState.cpp"
+
+"src/states/game/TestGameState.cpp"
+
+"src/gameObjects/player/TestPlayer.cpp"
+)
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY
   ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
@@ -52,60 +88,58 @@ link_directories(${LIB_DIR})
 
 # add_executable(GEngine ${SOURCES})
 
-add_executable(GEngine
-"src/main.cpp"
-"src/engine/DEFINITIONS.hpp"
-"src/engine/game/GameComponents.hpp"
+if (TARGET_MAC)
+    add_executable(${CUR_TARGET} MACOSX_BUNDLE ${SOURCES})
 
-
-"src/engine/utils/window.cpp"
-"src/engine/gameManager/GameManager.cpp"
-"src/engine/game/Game.cpp"
-"src/engine/core/asset/AssetManager.cpp"
-"src/engine/core/input/InputManager.cpp"
-"src/engine/core/object/ObjectManager.cpp"
-"src/engine/core/state/State.hpp"
-"src/engine/core/state/State.cpp"
-"src/engine/core/state/StateMachine.hpp"
-"src/engine/core/state/StateMachine.cpp"
-"src/engine/core/window/WindowManager.cpp"
-"src/engine/core/world/generator/WorldGenerator.cpp"
-"src/engine/core/world/loader/WorldLoader.cpp"
-
-"src/states/default/BaseState.cpp"
-"src/states/default/splash/SplashState.cpp"
-"src/states/default/mainMenu/MainMenuState.cpp"
-"src/states/default/quit/QuitState.cpp"
-)
-
+    set_target_properties(${CUR_TARGET} PROPERTIES
+        BUNDLE True
+        MACOSX_BUNDLE_GUI_IDENTIFIER com.pchrusciel.${CUR_TARGET}
+        MACOSX_BUNDLE_BUNDLE_NAME ${CUR_TARGET}
+        MACOSX_BUNDLE_BUNDLE_VERSION "0.1"
+        MACOSX_BUNDLE_SHORT_VERSION_STRING "0.1"
+        MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/cmake/gengine.plist.in
+    )
+else()
+    add_executable(${CUR_TARGET} ${SOURCES})
+endif()
 
 # target_link_libraries(GEngine ${LIBRARIES})
 
 if(TARGET_MAC)
-    target_link_libraries(GEngine "-framework CoreGraphics" "-framework Foundation")
+    target_link_libraries(${CUR_TARGET} "-framework CoreGraphics" "-framework Foundation")
 endif()
 
-target_link_libraries(GEngine "-L${CMAKE_CURRENT_SOURCE_DIR}/lib/mac_x64")
-target_link_libraries(GEngine "sfml-graphics" "sfml-window" "sfml-system")
+target_link_libraries(${CUR_TARGET} "-L${CMAKE_CURRENT_SOURCE_DIR}/lib/mac_x64")
+target_link_libraries(${CUR_TARGET} "sfml-graphics" "sfml-window" "sfml-system" "sfml-audio")
 
+if(!TARGET_MAC)
 install(
-    TARGETS GEngine
+    TARGETS ${CUR_TARGET}
     RUNTIME DESTINATION "bin"
     LIBRARY DESTINATION "lib"
     ARCHIVE DESTINATION "lib"
     COMPONENT library
 )
+endif()
 if (TARGET_MAC)
     add_custom_command(TARGET GEngine POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
             "${PROJECT_SOURCE_DIR}/frameworks/"
             $<TARGET_FILE_DIR:GEngine>/../Frameworks)
+    add_custom_command(TARGET GEngine POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${PROJECT_SOURCE_DIR}/lib/mac_x64/"
+        $<TARGET_FILE_DIR:GEngine>/../Frameworks)
+    add_custom_command(TARGET GEngine POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${PROJECT_SOURCE_DIR}/resources/"
+        $<TARGET_FILE_DIR:GEngine>/../resources)
 endif()
 
-add_custom_command(TARGET GEngine POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "${PROJECT_SOURCE_DIR}/resources/"
-        $<TARGET_FILE_DIR:GEngine>/resources/)
+# add_custom_command(TARGET GEngine POST_BUILD
+#     COMMAND ${CMAKE_COMMAND} -E copy_directory
+#         "${PROJECT_SOURCE_DIR}/resources/"
+#         $<TARGET_FILE_DIR:GEngine>/resources/)
 
 #configure_file(resources/shaders/default.frag res/default.frag COPYONLY)
 #configure_file(resources/shaders/default.vert res/default.vert COPYONLY)

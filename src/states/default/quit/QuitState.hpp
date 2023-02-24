@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include "../BaseState.hpp"
+#include "../../BaseState.hpp"
 #include "../../../engine/DEFINITIONS.hpp"
 #include "../../../engine/game/GameComponents.hpp"
 

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../../engine/core/state/State.hpp"
-#include "../../engine/game/GameComponents.hpp"
+#include "../engine/core/state/State.hpp"
+#include "../engine/game/GameComponents.hpp"
 
 namespace Gengine {
     class BaseState : public State {

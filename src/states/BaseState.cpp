@@ -11,7 +11,7 @@ namespace Gengine {
     void BaseState::handleEvents() {
         sf::Event event;
 
-        while (_data->windowManager.window.pollEvent(event))
+        while (_data->windowManager.window->pollEvent(event))
         {
             this->handleDefaultInput(event);
             
@@ -24,7 +24,7 @@ namespace Gengine {
     {
         if (sf::Event::Closed == event.type)
         {
-            _data->windowManager.window.close();
+            _data->windowManager.window->close();
         }
         
     }

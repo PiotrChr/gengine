@@ -8,8 +8,21 @@
 namespace Gengine {
     class WindowManager {
     public:
-        void init(int width, int height, std::string title);
+        WindowManager() {};
+        ~WindowManager();
+        
+        void init(std::string title);
+        void toggleFullscreen();
+        void setResolution(std::string resolution);
         bool isOpen();
-        sf::RenderWindow window;
+        sf::RenderWindow* window;
+        bool isFullscreen;
+        bool isVsync;
+        int antialiasing;
+        int framerate;
+        std::string resolution;
+        int width;
+        int height;
+    
     };
 }

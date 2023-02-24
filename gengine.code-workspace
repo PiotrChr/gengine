@@ -62,7 +62,11 @@
 			"typeinfo": "cpp",
 			"variant": "cpp",
 			"vector": "cpp",
-			"iostream": "cpp"
+			"iostream": "cpp",
+			"fstream": "cpp",
+			"iomanip": "cpp",
+			"set": "cpp",
+			"sstream": "cpp"
 		}
 	}
 }

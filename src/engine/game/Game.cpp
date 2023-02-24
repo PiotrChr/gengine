@@ -34,7 +34,7 @@ namespace Gengine {
     void Game::init() {
         std::cout << "Initializing game..." << std::endl;
 
-        _data->windowManager.init(_res_w, _res_h, _title);
+        _data->windowManager.init(_title);
 
         this->run();
     }

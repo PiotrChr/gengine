@@ -8,8 +8,11 @@ namespace Gengine {
         InputManager();
         ~InputManager();
 
-        bool isSpriteClicked(sf::Sprite object, sf::Mouse::Button button, sf::RenderWindow &window);
-        sf::Vector2i getMousePosition(sf::RenderWindow &window);
-    private:
+        bool isElemClicked(sf:: Sprite object, sf::Mouse::Button button, sf::RenderWindow* window);
+        bool isElemClicked(sf::RectangleShape object, sf::Mouse::Button button, sf::RenderWindow* window);
+        void initKeys();
+        sf::Vector2i getMousePosition(sf::RenderWindow* window);
+        std::map<std::string, int> keyBinds;
+    
     };
 }

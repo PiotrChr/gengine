@@ -1,6 +1,8 @@
 #pragma once
+
 #include <map>
 #include <SFML/Graphics.hpp>
+#include "../../globals.hpp"
 
 namespace Gengine {
     class AssetManager {
@@ -14,6 +16,7 @@ namespace Gengine {
         void loadFont(std::string name, std::string filePath);
         sf::Font& getFont(std::string name);
     private:
+        std::string getFilePath(std::string relativePath);
         std::map<std::string, sf::Texture> _textures;    
         std::map<std::string, sf::Font> _fonts;    
     };
