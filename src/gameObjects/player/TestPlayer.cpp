@@ -6,9 +6,41 @@ namespace Gengine
     {
         shape.setSize(sf::Vector2f(50, 100));
         shape.setFillColor(sf::Color::Red);
-        shape.setPosition(100, 100);
+        shape.setPosition({100.0f, 100.0f});
 
         setSpeed(100.f);
+    }
+
+    void TestPlayer::handleInput(sf::Event event, const float dt) {
+        std::cout << "TestPlayer::handleInput" << std::endl;
+        std::cout << "event.type: " << event.type << std::endl;
+        std::cout << "event.key.code: " << event.key.code << std::endl;
+
+        std::cout << _data->inputManager.keyBinds["LEFT"] << std::endl;
+
+        if (sf::Event::KeyPressed == event.type) {
+            if (_data->inputManager.keyBinds["MOVE_LEFT"] == event.key.code) {
+                setMovingLeft(true);
+            } else if (_data->inputManager.keyBinds["MOVE_RIGHT"] == event.key.code) {
+                setMovingRight(true);
+            } else if (_data->inputManager.keyBinds["MOVE_UP"] == event.key.code) {
+                setMovingUp(true);
+            } else if (_data->inputManager.keyBinds["MOVE_DOWN"] == event.key.code) {
+                setMovingDown(true);
+            }
+        }
+
+        if (sf::Event::KeyReleased == event.type) {
+            if (_data->inputManager.keyBinds["MOVE_LEFT"] == event.key.code) {
+                setMovingLeft(false);
+            } else if (_data->inputManager.keyBinds["MOVE_RIGHT"] == event.key.code) {
+                setMovingRight(false);
+            } else if (_data->inputManager.keyBinds["MOVE_UP"] == event.key.code) {
+                setMovingUp(false);
+            } else if (_data->inputManager.keyBinds["MOVE_DOWN"] == event.key.code) {
+                setMovingDown(false);
+            }
+        }
     }
 
     void TestPlayer::update(const float& dt)
@@ -21,20 +53,20 @@ namespace Gengine
             shape.setFillColor(sf::Color::Red);
         }
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-            move(-1, 0, 0, dt);
+        if (getMovingDown()) {
+            move(0, 1, 0, dt);
         }
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-            move(1, 0, 0, dt);
-        }
-
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+        if (getMovingUp()) {
             move(0, -1, 0, dt);
         }
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-            move(0, 1, 0, dt);
+        if (getMovingLeft()) {
+            move(-1, 0, 0, dt);
+        }
+
+        if (getMovingRight()) {
+            move(1, 0, 0, dt);
         }
     }
 
@@ -46,6 +78,6 @@ namespace Gengine
     void TestPlayer::move(const float dir_x, const float dir_y, const float dir_z, const float& dt)
     {
         float speed = getSpeed();
-        shape.move(dir_x * speed * dt, dir_y * speed * dt);
+        shape.move({dir_x * speed * dt, dir_y * speed * dt});
     }
 } // namespace Gengine

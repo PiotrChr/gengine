@@ -8,6 +8,7 @@ namespace Gengine {
     {
     public:
         HudObject(GameComponentsRef data) : GameObject(data) {};
+        HudObject() {};
         virtual ~HudObject() {};
 
         void setPosition(int x, int y);

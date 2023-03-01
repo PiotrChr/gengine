@@ -12,7 +12,8 @@ namespace Gengine {
         void update(const float& dt);
         void move(const float dir_x, const float dir_y, const float dir_z, const float& dt);
         void draw(sf::RenderTarget* target);
+        void handleInput(sf::Event event, const float dt);
     private:
-        sf:: RectangleShape shape;
+        sf::RectangleShape shape;
     };
 }

@@ -10,6 +10,7 @@ set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 set(CUR_TARGET GEngine)
+# set(CMAKE_SKIP_RPATH TRUE)
 
 file(GLOB SOURCES 
 "src/main.cpp"
@@ -26,6 +27,7 @@ file(GLOB SOURCES
 "src/engine/core/input/InputManager.cpp"
 "src/engine/core/object/ObjectManager.cpp"
 "src/engine/core/object/InGameObject.cpp"
+"src/engine/core/object/hud/elements/Button.cpp"
 "src/engine/core/state/State.hpp"
 "src/engine/core/state/State.cpp"
 "src/engine/core/state/StateMachine.cpp"
@@ -45,6 +47,7 @@ file(GLOB SOURCES
 "src/states/game/TestGameState.cpp"
 
 "src/gameObjects/player/TestPlayer.cpp"
+"src/gameObjects/hud/mainMenu/MainMenuButton.cpp"
 )
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY
@@ -56,6 +59,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY
 
 if(TARGET_MAC)
     set (LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/lib/mac_x64")
+    set (FRAMEWORKS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/frameworks/")
     include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/mac_x64/)
     
 elseif(TARGET_WIN)
@@ -122,18 +126,41 @@ install(
 )
 endif()
 if (TARGET_MAC)
+install(
+    DIRECTORY ${FRAMEWORKS_DIR}
+    DESTINATION ${CMAKE_BINARY_DIR}/Gengine.app/Contents/Frameworks)
+
+    install(
+        DIRECTORY ${PROJECT_SOURCE_DIR}/lib/mac_x64/
+        DESTINATION ${CMAKE_BINARY_DIR}/GEngine.app/Contents/Frameworks
+    )
+
+    install(
+        DIRECTORY ${PROJECT_SOURCE_DIR}/resources/
+        DESTINATION ${CMAKE_BINARY_DIR}/GEngine.app/Contents/Resources
+    )
+
+    # install(
+    #     FILES ${PROJECT_SOURCE_DIR}/scripts/launch.sh
+    #     DESTINATION ${CMAKE_BINARY_DIR}/GEngine.app/Contents/MacOS/
+    # )
+
     add_custom_command(TARGET GEngine POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
-            "${PROJECT_SOURCE_DIR}/frameworks/"
-            $<TARGET_FILE_DIR:GEngine>/../Frameworks)
-    add_custom_command(TARGET GEngine POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "${PROJECT_SOURCE_DIR}/lib/mac_x64/"
-        $<TARGET_FILE_DIR:GEngine>/../Frameworks)
-    add_custom_command(TARGET GEngine POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "${PROJECT_SOURCE_DIR}/resources/"
-        $<TARGET_FILE_DIR:GEngine>/../resources)
+            "${PROJECT_SOURCE_DIR}/scripts/"
+            $<TARGET_FILE_DIR:GEngine>)
+
+    install(CODE "
+        include(BundleUtilities)
+        fixup_bundle(\"${CMAKE_BINARY_DIR}/GEngine.app\" \"\" \"${LIB_DIR}\")
+    " COMPONENT Runtime
+    )
+
+    
+    # add_custom_command(TARGET GEngine POST_BUILD
+    #     COMMAND ${CMAKE_COMMAND} -E copy_directory
+    #     "${PROJECT_SOURCE_DIR}/resources/"
+    #     $<TARGET_FILE_DIR:GEngine>/../Resources)
 endif()
 
 # add_custom_command(TARGET GEngine POST_BUILD

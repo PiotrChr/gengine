@@ -8,24 +8,28 @@ namespace Gengine {
     void TestGameState::init() {
         _data->assetManager.loadTexture("TestGameState Background", TEST_GAME_STATE_BACKGROUND_FILEPATH);
         _background.setTexture(_data->assetManager.getTexture("TestGameState Background"));
+        scaleToWindow(_background);
 
         _data->assetManager.loadTexture("TestGameState Sprite", TEST_GAME_STATE_SPRITE_FILEPATH);
         _testingSprite.setTexture(_data->assetManager.getTexture("TestGameState Sprite"));
 
-        _testingSprite.setPosition(
-            _data->windowManager.window->getSize().x - _testingSprite.getGlobalBounds().width - 10,
-            10
-        );
+        _testingSprite.setPosition({_data->windowManager.window->getSize().x - _testingSprite.getGlobalBounds().width - 10, 10});
     }
     
-    void TestGameState::handleInput(sf::Event event) {
+    void TestGameState::handleInput(sf::Event event, const float dt) {  
         if (sf::Event::KeyPressed == event.type)
         {
+            std::cout << "TestGameState: Key pressed" << std::endl;
+            std::cout << "TestGameState: Key code: " << event.key.code << std::endl;
+
             if (sf::Keyboard::Escape == event.key.code)
             {
+                std::cout << "TestGameState: Escape key pressed, going back to MainMenuState" << std::endl;
                 _data->stateMachine.removeState();
             }
         }
+
+        _player.handleInput(event, dt);
     }
     
     void TestGameState::update(float dt) {

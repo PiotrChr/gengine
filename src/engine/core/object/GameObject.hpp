@@ -7,6 +7,7 @@ namespace Gengine {
     {
     public:
         GameObject(GameComponentsRef data) : _data(data) {};
+        GameObject() {};
         virtual ~GameObject() {};
     protected:
         GameComponentsRef _data;

@@ -10,7 +10,7 @@ namespace Gengine {
         TestGameState(GameComponentsRef& data);
         ~TestGameState() {};
         void init();
-        void handleInput(sf::Event event);
+        void handleInput(sf::Event event, const float dt);
         void update(float dt);
         void draw(float dt);
         void pause();

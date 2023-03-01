@@ -43,12 +43,13 @@ namespace Gengine {
         std::cout << "Window width: " << width << std::endl;
         std::cout << "Window height: " << height << std::endl;
 
-        
+        const sf::Vector2u size(width, height);
+
         if (isFullscreen) {
-            window = new sf::RenderWindow(sf::VideoMode(width, height), title, sf::Style::Fullscreen);
+            window = new sf::RenderWindow(sf::VideoMode(size), title, sf::Style::Fullscreen);
         }
         else {
-            window = new sf::RenderWindow(sf::VideoMode(width, height), title, sf::Style::Close | sf::Style::Titlebar);
+            window = new sf::RenderWindow(sf::VideoMode(size), title, sf::Style::Close | sf::Style::Titlebar);
         }
         
     }

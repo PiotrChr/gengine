@@ -25,4 +25,45 @@ namespace Gengine
     {
         return _speed;
     }
+
+    bool InGameObject::getMovingUp()
+    {
+        return _moving_up;
+    }
+
+    bool InGameObject::getMovingDown()
+    {
+        return _moving_down;
+    }
+
+    bool InGameObject::getMovingLeft()
+    {
+        return _moving_left;
+    }
+
+    bool InGameObject::getMovingRight()
+    {
+        return _moving_right;
+    }
+
+    void InGameObject::setMovingUp(bool moving)
+    {
+        _moving_up = moving;
+    }
+
+    void InGameObject::setMovingDown(bool moving)
+    {
+        _moving_down = moving;
+    }
+
+    void InGameObject::setMovingLeft(bool moving)
+    {
+        _moving_left = moving;
+    }
+
+    void InGameObject::setMovingRight(bool moving)
+    {
+        _moving_right = moving;
+    }
+
 } // namespace Gengine

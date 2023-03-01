@@ -65,8 +65,10 @@ namespace Gengine {
 
             StateRef &activeState = this->_data->stateMachine.getActiveState();
 
+            activeState->handleEvents(dt);
+
             while (accumulator >= dt) {
-                activeState->handleEvents();
+                
                 activeState->update(dt);
                 
                 accumulator -= dt;

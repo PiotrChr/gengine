@@ -29,8 +29,10 @@ namespace Gengine {
     void AssetManager::loadTexture(std::string name, std::string filePath) {
         sf::Texture tex;
 
-        if (tex.loadFromFile(getFilePath(filePath))) {
-            this->_textures[name] = tex;
+        if (this->_textures.find(name) == this->_textures.end()) {
+            if (tex.loadFromFile(getFilePath(filePath))) {
+                this->_textures[name] = tex;
+            }
         }
     }
 
@@ -41,8 +43,10 @@ namespace Gengine {
     void AssetManager::loadFont(std::string name, std::string filePath) {
         sf::Font font;
 
-        if (font.loadFromFile(getFilePath(filePath))) {
-            this->_fonts[name] = font;
+        if (this->_fonts.find(name) == this->_fonts.end()) {
+            if (font.loadFromFile(getFilePath(filePath))) {
+                this->_fonts[name] = font;
+            }
         }
     }
 

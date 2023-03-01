@@ -66,7 +66,11 @@
 			"fstream": "cpp",
 			"iomanip": "cpp",
 			"set": "cpp",
-			"sstream": "cpp"
+			"sstream": "cpp",
+			"__hash_table": "cpp",
+			"cmath": "cpp",
+			"unordered_map": "cpp",
+			"unordered_set": "cpp"
 		}
 	}
 }
