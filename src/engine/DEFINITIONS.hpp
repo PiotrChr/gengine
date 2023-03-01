@@ -1,9 +1,83 @@
 #pragma once
+#include "globals.hpp"
 
+// DEAULT SETTINGS
 #define DEFAULT_SCREEN_WIDTH 1024
 #define DEFAULT_SCREEN_HEIGHT 768
+#define DEFAULT_RESOLUTION "1024x768"
+#define DEFAULT_FULLSCREEN false
+#define DEFAULT_FRAMERATE 60
+#define DEFAULT_VSYNC false
+#define DEFAULT_ANTIALIASING 0
+#define DEFAULT_MUSIC true
+#define DEFAULT_SOUND true
+#define DEFAULT_MUSIC_VOLUME 100
+#define DEFAULT_SOUND_VOLUME 100
 
-#define SPLASH_STATE_SHOW_TIME 3.0
+#define SPLASH_STATE_SHOW_TIME 1.0
+ 
+// DEFAULT HUD SETTINGS
+#define DEFAULT_HUD_FONT_SIZE 20
+#define DEFAULT_HUD_FONT_COLOR sf::Color::White
+#define DEFAULT_HUD_FONT_STYLE sf::Text::Regular
+#define DEFAULT_HUD_FONT ROOT_RESOURCE_PATH "fonts/Roboto/Roboto-Light.ttf"
 
-#define SPLASH_SCENE_BACKGROUND_FILEPATH "resources/states/splash/bg.png"
-#define MM_SCENE_BACKGROUND_FILEPATH "resources/states/mainMenu/bg.png"
+#define DEFAULT_HUD_BUTTON_FONT DEFAULT_HUD_FONT
+#define DEFAULT_HUD_BUTTON_FONT_SIZE DEFAULT_HUD_FONT_SIZE
+#define DEFAULT_HUD_BUTTON_FONT_COLOR DEFAULT_HUD_FONT_COLOR
+#define DEFAULT_HUD_BUTTON_FONT_STYLE DEFAULT_HUD_FONT_STYLE
+#define DEFAULT_HUD_BUTTON_HAS_BACKGROUND false
+#define DEFAULT_HUD_BUTTON_BACKGROUND_COLOR sf::Color::White
+#define DEFAULT_HUD_BUTTON_HAS_BORDER false
+#define DEFAULT_HUD_BUTTON_BORDER_COLOR sf::Color::Black
+#define DEFAULT_HUD_BUTTON_BORDER_SIZE 1
+#define DEFAULT_HUD_BUTTON_BORDER_RADIUS 0
+#define DEFAULT_HUD_BUTTON_HAS_ICON false
+#define DEFAULT_HUD_BUTTON_HOVER_COLOR sf::Color::Magenta
+#define DEFAULT_HUD_BUTTON_CLICK_COLOR sf::Color::White
+#define DEFAULT_HUD_BUTTON_ICON_POSITION 0
+#define DEFAULT_HUD_BUTTON_ICON_SIZE 0
+#define DEFAULT_HUD_BUTTON_PADDING sf::Vector2i(0, 0)
+// SAVE SETTINGS
+
+#if _IS_MAC
+    #define ROOT_RESOURCE_PATH "../Resources/"
+#else
+    #define ROOT_RESOURCE_PATH "../resources/"
+#endif
+
+#define SAVE_FILE_PATH ROOT_RESOURCE_PATH "/save/save.txt"
+#define SAVE_SETTINGS_FILE_PATH "settings.ini"
+
+// DEFAULT KEY BINDINGS
+#define DEFAULT_MOVE_UP sf::Keyboard::W
+#define DEFAULT_MOVE_DOWN sf::Keyboard::S
+#define DEFAULT_MOVE_LEFT sf::Keyboard::A
+#define DEFAULT_MOVE_RIGHT sf::Keyboard::D
+#define DEFAULT_INTERACT sf::Keyboard::E
+#define DEFAULT_PAUSE sf::Keyboard::P
+#define DEFAULT_INVENTORY sf::Keyboard::I
+#define DEFAULT_ESCAPE sf::Keyboard::Escape
+#define DEFAULT_DEBUG sf::Keyboard::F3
+
+// SPLASH SCREEN
+#define SPLASH_SCENE_BACKGROUND_FILEPATH ROOT_RESOURCE_PATH "states/splash/bg.png"
+
+// MAIN MENU
+#define MM_SCENE_BACKGROUND_FILEPATH ROOT_RESOURCE_PATH "states/splash/bg.png"
+#define MM_SCENE_LOGO_FILEPATH ROOT_RESOURCE_PATH "states/mainMenu/logo.png"
+#define MM_SCENE_BUTTON_PLAY ROOT_RESOURCE_PATH "states/mainMenu/play.png"
+#define MM_SCENE_BUTTON_OUTER ROOT_RESOURCE_PATH "states/mainMenu/button_outer.png"
+#define MM_SCENE_BUTTON_QUIT ROOT_RESOURCE_PATH "states/mainMenu/quit.png"
+#define MM_SCENE_BUTTON_TEST ROOT_RESOURCE_PATH "states/mainMenu/test.png"
+
+// QUIT SCREEN
+#define QUIT_SCENE_BACKGROUND_FILEPATH ROOT_RESOURCE_PATH "states/quit/bg.png"
+#define QUIT_STATE_SHOW_TIME 3.0
+
+// GAME SCREEN
+#define GAME_SCENE_BACKGROUND_FILEPATH ROOT_RESOURCE_PATH "states/mainMenu/bg.png"
+
+// TEST GAME SCREEN
+#define TEST_GAME_STATE_BACKGROUND_FILEPATH ROOT_RESOURCE_PATH "states/mainMenu/bg.png"
+#define TEST_GAME_STATE_SPRITE_FILEPATH ROOT_RESOURCE_PATH "states/testGame/sprite.png"

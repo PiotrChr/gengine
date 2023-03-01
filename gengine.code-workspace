@@ -62,7 +62,15 @@
 			"typeinfo": "cpp",
 			"variant": "cpp",
 			"vector": "cpp",
-			"iostream": "cpp"
+			"iostream": "cpp",
+			"fstream": "cpp",
+			"iomanip": "cpp",
+			"set": "cpp",
+			"sstream": "cpp",
+			"__hash_table": "cpp",
+			"cmath": "cpp",
+			"unordered_map": "cpp",
+			"unordered_set": "cpp"
 		}
 	}
 }

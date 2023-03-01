@@ -2,8 +2,10 @@
 .vscode
 
 cmake/
+cmake/
 build/
 include/
 frameworks/
 lib/
 resources/
+/tmp

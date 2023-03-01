@@ -1,8 +1,11 @@
 #pragma once
 
 #include <tuple>
+#include <fstream>
+#include <string>
 #include "../globals.hpp"
 #include "../DEFINITIONS.hpp"
+
 
 #if _IS_WINDOWS
     #include <windows.h>
@@ -14,4 +17,5 @@
 
 namespace Gengine {
     int* getCurrentResolution();
+    bool fileExists(const std::string& name);
 }
