@@ -14,7 +14,6 @@ namespace Gengine {
         while (_data->windowManager.window->pollEvent(event))
         {
             this->handleDefaultInput(event);
-            
             this->handleInput(event, dt);
         }
     

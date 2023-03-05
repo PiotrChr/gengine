@@ -1,4 +1,5 @@
 #include "Button.hpp"
+#include <iostream>
 
 namespace Gengine {
     Button::Button(
@@ -7,7 +8,7 @@ namespace Gengine {
         sf::Vector2f position,
         sf::Vector2f size,
         std::function<void(void)> clickHandler,
-        sf::Vector2i padding,
+        sf::Vector2f padding,
         bool hasBorder,
         bool hasBackground,
         bool hasIcon,
@@ -31,9 +32,9 @@ namespace Gengine {
             _currentTextColor = textColor;
             
             std::cout << "Loading font: " << font << std::endl;
-            _data->assetManager.loadFont("menu-font", font);
-
-            _font = _data->assetManager.getFont("menu-font");
+            _data->assetManager.loadFont(font, font);
+            
+            _font = _data->assetManager.getFont(font);
 
             _hasBorder = hasBorder;
             _borderSize = borderSize;
@@ -41,11 +42,6 @@ namespace Gengine {
             _borderColor = borderColor;
             
             _textSize = _size.y - 2*_padding.y - 2*_borderSize;
-
-            _bounds = sf::Rect<float>(
-                {_position.x, _position.y},
-                {_size.x, _size.y}
-            );
 
             _hasBackground = hasBackground;
             _backgroundColor = backgroundColor;
@@ -70,21 +66,30 @@ namespace Gengine {
         _textObj.setString(_text);
         _textObj.setCharacterSize(_textSize);
         _textObj.setFillColor(_currentTextColor);
-        _textObj.setPosition({
-            _position.x + _size.x/2 - _textObj.getLocalBounds().width/2,
-            _position.y + _size.y/2 - _textObj.getLocalBounds().height/1.5f
-        });
-
+        
         if (_hasBorder) {
             _borderObj.setSize(_size);
-            _borderObj.setPosition(_position);
             _borderObj.setFillColor(sf::Color::Transparent);
             _borderObj.setOutlineColor(_currentTextColor);
             _borderObj.setOutlineThickness(_borderSize);
-            
         }
     };
 
+    void Button::setPosition(sf::Vector2f position) {
+        _position = position;
+        _borderObj.setPosition(_position);
+        
+        std::cout << std::string(_textObj.getString()) << std::endl;
+        // center _textObj
+        sf::FloatRect textRect = _textObj.getLocalBounds();
+        _textObj.setOrigin({textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f});
+        _textObj.setPosition({_position.x + _size.x/2.0f, _position.y + _size.y/2.0f});
+
+        _bounds = sf::Rect<float>(
+            {_position.x, _position.y},
+            {_size.x, _size.y}
+        );
+    };
     void Button::handleInput(sf::Event event, const float dt) {
         if (event.type == sf::Event::MouseButtonPressed) {
             if (event.mouseButton.button == sf::Mouse::Left) {
@@ -140,11 +145,44 @@ namespace Gengine {
         return _position;
     };
     
-    void Button::setPosition(sf::Vector2f position) {
-        _position = position;
-    };
-
     void Button::setClickHandler(std::function<void(void)> clickHandler) {
         _clickHandler = clickHandler;
+    };
+
+    std::string Button::getText() {
+        return _text;
+    };
+
+    void Button::setText(std::string text) {
+        _text = text;
+        _textObj.setString(_text);
+    };
+
+    void Button::setTextColor(sf::Color color) {
+        _textColor = color;
+    };
+
+    void Button::setBorderColor(sf::Color color) {
+        _borderColor = color;
+    };
+
+    void Button::setBackgroundColor(sf::Color color) {
+        _backgroundColor = color;
+    };
+
+    void Button::setHoverColor(sf::Color color) {
+        _hoverColor = color;
+    };
+
+    void Button::setClickColor(sf::Color color) {
+        _clickColor = color;
+    };
+
+    void Button::setSize(sf::Vector2f size) {
+        _size = size;
+    };
+
+    void Button::setPadding(sf::Vector2f padding) {
+        _padding = padding;
     };
 }

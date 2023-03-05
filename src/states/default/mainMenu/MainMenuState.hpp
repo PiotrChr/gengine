@@ -19,7 +19,7 @@ namespace Gengine {
         sf::Sprite _background;
         MainMenuButton _playButton;
         MainMenuButton _quitButton;
-        MainMenuButton _testButton;
+        MainMenuButton _optionsButton;
         sf::Sprite _title;
     };
 }

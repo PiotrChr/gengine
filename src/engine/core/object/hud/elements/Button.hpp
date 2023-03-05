@@ -13,18 +13,18 @@ namespace Gengine {
             sf::Vector2f position,
             sf::Vector2f size,
             std::function<void(void)> clickHandler,
-            sf::Vector2i padding = DEFAULT_HUD_BUTTON_PADDING,
-            bool hasBorder = DEFAULT_HUD_BUTTON_HAS_BORDER,
+            sf::Vector2f padding = DEFAULT_HUD_BUTTON_PADDING,
+            bool hasBorder = DEFAULT_HUD_DROPDOWN_HAS_BORDER,
             bool hasBackground = DEFAULT_HUD_BUTTON_HAS_BACKGROUND,
             bool hasIcon = DEFAULT_HUD_BUTTON_HAS_ICON,
             std::string font = DEFAULT_HUD_BUTTON_FONT,
-            sf::Color textColor = DEFAULT_HUD_BUTTON_FONT_COLOR,
-            int borderSize = DEFAULT_HUD_BUTTON_BORDER_SIZE,
+            sf::Color textColor = DEFAULT_HUD_DROPDOWN_FONT_COLOR,
+            int borderSize = DEFAULT_HUD_DROPDOWN_BORDER_SIZE,
             // int borderRadius = DEFAULT_HUD_BUTTON_BORDER_RADIUS,
-            sf::Color borderColor = DEFAULT_HUD_BUTTON_BORDER_COLOR,
-            sf::Color backgroundColor = DEFAULT_HUD_BUTTON_BACKGROUND_COLOR,
-            sf::Color hoverColor = DEFAULT_HUD_BUTTON_HOVER_COLOR,
-            sf::Color clickColor = DEFAULT_HUD_BUTTON_CLICK_COLOR,
+            sf::Color borderColor = DEFAULT_HUD_DROPDOWN_BORDER_COLOR,
+            sf::Color backgroundColor = DEFAULT_HUD_DROPDOWN_BACKGROUND_COLOR,
+            sf::Color hoverColor = DEFAULT_HUD_DROPDOWN_HOVER_COLOR,
+            sf::Color clickColor = DEFAULT_HUD_DROPDOWN_CLICK_COLOR,
             int iconPosition = DEFAULT_HUD_BUTTON_ICON_POSITION,
             int iconSize = DEFAULT_HUD_BUTTON_ICON_SIZE
             );
@@ -34,17 +34,26 @@ namespace Gengine {
         void update(const float& dt);
         void draw(sf::RenderTarget* target);
         
-        void setPosition(sf::Vector2f position);
         sf::Vector2f getPosition();
         sf::Vector2f getSize();
-
+        std::string getText();
+    
+        void setPosition(sf::Vector2f position);
+        void setSize(sf::Vector2f size);
+        void setBackgroundColor(sf::Color color);
+        void setBorderColor(sf::Color color);
+        void setTextColor(sf::Color color);
+        void setText(std::string text);
+        void setHoverColor(sf::Color color);
+        void setClickColor(sf::Color color);
+        void setPadding(sf::Vector2f padding);
         void setClickHandler(std::function<void(void)> handler);
         void handleInput(sf::Event event, const float dt);
     private:
         sf::Rect<float> _bounds;
         sf::Vector2f _size;
         sf::Vector2f _position;
-        sf::Vector2i _padding;
+        sf::Vector2f _padding;
 
         sf::Text _textObj;
         std::string _text;

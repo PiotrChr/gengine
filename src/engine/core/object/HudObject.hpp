@@ -11,12 +11,15 @@ namespace Gengine {
         HudObject() {};
         virtual ~HudObject() {};
 
-        void setPosition(int x, int y);
-        void setSize(int width, int height);
+        void setPosition(sf::Vector2f position);
+        void setSize(sf::Vector2f size);
         void getPosition(int& x, int& y);
 
         void update(const float& dt);
         void draw(sf::RenderTarget& target);
+    protected:
+        sf::Vector2f _position;
+        sf::Vector2f _size;
     private: 
         int _pos_x;
         int _pos_y;

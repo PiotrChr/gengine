@@ -70,7 +70,8 @@
 			"__hash_table": "cpp",
 			"cmath": "cpp",
 			"unordered_map": "cpp",
-			"unordered_set": "cpp"
+			"unordered_set": "cpp",
+			"filesystem": "cpp"
 		}
 	}
 }

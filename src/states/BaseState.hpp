@@ -21,5 +21,6 @@ namespace Gengine {
     protected:
         GameComponentsRef _data;
         sf::Sprite _background;
+        
     };
 }

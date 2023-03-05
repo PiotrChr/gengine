@@ -1,7 +1,7 @@
-#include "MainMenuButton.hpp"
+#include "GameButton.hpp"
 
 namespace Gengine {
-    MainMenuButton::MainMenuButton(
+    GameButton::GameButton(
         GameComponentsRef& data,
         std::string text,
         sf::Vector2f position,
@@ -12,9 +12,9 @@ namespace Gengine {
         data,
         text,
         position,
-        sf::Vector2f(150, 75),
+        sf::Vector2f(150.f, 38.f),
         clickHandler,
-        sf::Vector2f(0, 20.0f),
+        sf::Vector2f(0.0f, 7.0f),
         true,
         false,
         false,

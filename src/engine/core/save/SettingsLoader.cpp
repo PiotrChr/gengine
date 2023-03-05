@@ -1,7 +1,7 @@
 #include "SettingsLoader.hpp"
 
 namespace Gengine {
-    void SettingsLoader::loadSettings(GameComponentsRef _data)
+    void SettingsLoader::loadSettings(GameComponentsRef& _data)
     {
         if (!fileExists(SAVE_SETTINGS_FILE_PATH)) {
             this->createSettingsFile();
@@ -21,14 +21,7 @@ namespace Gengine {
                 std::getline(keystream, value);
                 if (key == "fullscreen")
                 {
-                    if (value == "true")
-                    {
-                        _data->windowManager.isFullscreen = true;
-                    }
-                    else
-                    {
-                        _data->windowManager.isFullscreen = false;
-                    }
+                    _data->windowManager.isFullscreen = std::stoi(value);
                 }
                 else if (key == "resolution")
                 {
@@ -40,14 +33,8 @@ namespace Gengine {
                 }
                 else if (key == "vsync")
                 {
-                    if (value == "true")
-                    {
-                        _data->windowManager.isVsync = true;
-                    }
-                    else
-                    {
-                        _data->windowManager.isVsync = false;
-                    }
+                    _data->windowManager.isVsync = std::stoi(value);
+                    
                 }
                 else if (key == "antialiasing")
                 {
@@ -55,25 +42,11 @@ namespace Gengine {
                 }
                 else if (key == "music")
                 {
-                    if (value == "true")
-                    {
-                        _data->audioManager.isMusic = true;
-                    }
-                    else
-                    {
-                        _data->audioManager.isMusic = false;
-                    }
+                     _data->audioManager.isMusic = std::stoi(value);
                 }
                 else if (key == "sound")
                 {
-                    if (value == "true")
-                    {
-                        _data->audioManager.isSound = true;
-                    }
-                    else
-                    {
-                        _data->audioManager.isSound = false;
-                    }
+                    _data->audioManager.isSound = std::stoi(value);
                 }
                 else if (key == "musicVolume")
                 {
@@ -154,7 +127,7 @@ namespace Gengine {
         file.close();
     }
 
-    void SettingsLoader::saveSettings(GameComponentsRef _data)
+    void SettingsLoader::saveSettings(GameComponentsRef& _data)
     {
         std::ofstream file;
         file.open(SAVE_SETTINGS_FILE_PATH);
