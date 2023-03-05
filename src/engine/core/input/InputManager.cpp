@@ -25,7 +25,6 @@ namespace Gengine
 
     bool InputManager::isElemClicked(sf::Sprite object, sf::Mouse::Button button, sf::RenderWindow* window) {
         if (sf::Mouse::isButtonPressed(button)) {
-            
             sf::Rect tempRect(object.getPosition(), object.getGlobalBounds().getSize());
 
             if (tempRect.contains(getMousePosition(window))) {

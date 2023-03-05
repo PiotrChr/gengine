@@ -1,6 +1,7 @@
 #include "MainMenuState.hpp"
 #include "../quit/QuitState.hpp"
 #include "../../game/TestGameState.hpp"
+#include "../options/OptionsState.hpp"
 
 namespace Gengine {
     void MainMenuState::init() {
@@ -15,41 +16,45 @@ namespace Gengine {
             _data->windowManager.height / 2 - _title.getGlobalBounds().height / 2 - 300
         });        
 
-        _playButton = MainMenuButton(_data, "Play", {
-            _data->windowManager.width / 2 - _playButton.getSize().x / 2,
-            _data->windowManager.height / 2 - _playButton.getSize().y / 2 - 100
-        }, []() {
-            std::cout << "Play button pressed" << std::endl;
-        });
-        _playButton.init();
-
-        _testButton = MainMenuButton(_data, "Test", {
-            _data->windowManager.width / 2 - _testButton.getSize().x / 2,
-            _data->windowManager.height / 2 - _testButton.getSize().y / 2
-        }, [this]() {
+        _playButton = MainMenuButton(_data, "Play", {0, 0}, [this]() {
             _data->stateMachine.addState(StateRef(new TestGameState(_data)), false);
         });
-        _testButton.init();
+        _playButton.init();
+        _playButton.setPosition({
+            _data->windowManager.width / 2 - _playButton.getSize().x / 2,
+            _data->windowManager.height / 2 - _playButton.getSize().y / 2 - 100
+        });
+        
 
-        _quitButton = MainMenuButton(_data, "Quit", {
-            _data->windowManager.width / 2 - _quitButton.getSize().x / 2,
-            _data->windowManager.height / 2 - _quitButton.getSize().y / 2 + 100
-        }, [this]() {
+        _optionsButton = MainMenuButton(_data, "Options", {0, 0}, [this]() {
+            _data->stateMachine.addState(StateRef(new OptionsState(_data)), false);
+        });
+        _optionsButton.init();
+        _optionsButton.setPosition({
+            _data->windowManager.width / 2 - _optionsButton.getSize().x / 2,
+            _data->windowManager.height / 2 - _optionsButton.getSize().y / 2
+        });
+        
+
+        _quitButton = MainMenuButton(_data, "Quit", {0, 0}, [this]() {
             _data->stateMachine.addState(StateRef(new QuitState(_data)), true);
         });
         _quitButton.init();
-    
+        _quitButton.setPosition({
+            _data->windowManager.width / 2 - _quitButton.getSize().x / 2,
+            _data->windowManager.height / 2 - _quitButton.getSize().y / 2 + 100
+        });
     }
     
     void MainMenuState::handleInput(sf::Event event, const float dt) {
         _playButton.handleInput(event, dt);
-        _testButton.handleInput(event, dt);
+        _optionsButton.handleInput(event, dt);
         _quitButton.handleInput(event, dt);
     }
     
     void MainMenuState::update(float dt) {
         _playButton.update(dt);
-        _testButton.update(dt);
+        _optionsButton.update(dt);
         _quitButton.update(dt);
     }
     
@@ -58,7 +63,7 @@ namespace Gengine {
         _data->windowManager.window->draw(_background);
 
         _playButton.draw(_data->windowManager.window);
-        _testButton.draw(_data->windowManager.window);
+        _optionsButton.draw(_data->windowManager.window);
         _quitButton.draw(_data->windowManager.window);
 
         _data->windowManager.window->draw(_title);

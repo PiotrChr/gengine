@@ -2,6 +2,7 @@
 #if _IS_MAC
     #include <mach-o/dyld.h>
 #endif
+#include <iostream>
 
 namespace Gengine {
     AssetManager::AssetManager() {
@@ -51,6 +52,10 @@ namespace Gengine {
     }
 
     sf::Font& AssetManager::getFont(std::string name) {
-        return this->_fonts.at(name);
+        if (this->_fonts.find(name) != this->_fonts.end()) {
+            return this->_fonts.at(name);
+        }
+        
+        throw std::runtime_error("Font not found: " + name);
     }
 }

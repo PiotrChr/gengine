@@ -2,34 +2,21 @@
 
 namespace Gengine {
     
-    void WindowManager::setResolution(std::string resolution) {
+    void WindowManager::setResolution(std::string resolution, bool fullscreen) {    
         this->resolution = resolution;
-        if (resolution == "800x600") {
-            width = 800;
-            height = 600;
-        }
-        else if (resolution == "1024x768") {
-            width = 1024;
-            height = 768;
-        }
-        else if (resolution == "1280x720") {
-            width = 1280;
-            height = 720;
-        }
-        else if (resolution == "1920x1080") {
-            width = 1920;
-            height = 1080;
-        }
-        else if (resolution == "5120x2880") {
-            width = 5120;
-            height = 2880;
-        }
+
+        sf::VideoMode mode = stringToMode(resolution);
         
-        else {
-            this->resolution = "800x600";
-            width = 800;
-            height = 600;
+        width = mode.size.x;
+        height = mode.size.y;
+
+        if (fullscreen) {
+            isFullscreen = true;
         }
+    }
+
+    void WindowManager::setFullscreen(bool fullscreen) {
+        isFullscreen = fullscreen;
     }
 
     void WindowManager::init(std::string title) {
@@ -42,6 +29,10 @@ namespace Gengine {
         std::cout << "Window antialiasing: " << antialiasing << std::endl;
         std::cout << "Window width: " << width << std::endl;
         std::cout << "Window height: " << height << std::endl;
+
+        for (auto mode : sf::VideoMode::getFullscreenModes()) {
+            _videoModes[modeToString(mode)] = mode;
+        }
 
         const sf::Vector2u size(width, height);
 
@@ -60,5 +51,55 @@ namespace Gengine {
 
     WindowManager::~WindowManager() {
         delete window;
+    }
+
+    void WindowManager::changeMode() {
+        window->close();
+        const sf::Vector2u size(width, height);
+
+
+        if (isFullscreen) {
+            window->create(sf::VideoMode(size), "Gengine", sf::Style::Close | sf::Style::Titlebar);
+            isFullscreen = false;
+        }
+        else {
+            window->create(sf::VideoMode(size), "Gengine", sf::Style::Fullscreen);
+            isFullscreen = true;
+        }
+    }
+
+    std::map<std::string, sf::VideoMode> WindowManager::getVideoModes() {
+        return _videoModes;
+    }
+
+    std::string WindowManager::modeToString(sf::VideoMode mode) {
+        return std::to_string(mode.size.x) + "x" + std::to_string(mode.size.y);
+    }
+
+    sf::VideoMode WindowManager::stringToMode(std::string resolution) {
+        std::string width = "";
+        std::string height = "";
+        bool isWidth = true;
+        for (int i = 0; i < resolution.length(); i++) {
+            if (resolution[i] == 'x') {
+                isWidth = false;
+                continue;
+            }
+            if (isWidth) {
+                width += resolution[i];
+            }
+            else {
+                height += resolution[i];
+            }
+        }
+        
+        unsigned int w = std::stoul(width);
+        unsigned int h = std::stoul(height);
+
+        return sf::VideoMode({w, h});
+    }
+
+    std::string WindowManager::getResolution() {
+        return resolution;
     }
 }

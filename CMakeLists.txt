@@ -29,6 +29,9 @@ file(GLOB SOURCES
 "src/engine/core/object/ObjectManager.cpp"
 "src/engine/core/object/InGameObject.cpp"
 "src/engine/core/object/hud/elements/Button.cpp"
+"src/engine/core/object/hud/elements/Label.cpp"
+"src/engine/core/object/hud/elements/LabeledDropDown.cpp"
+
 "src/engine/core/state/State.hpp"
 "src/engine/core/state/State.cpp"
 "src/engine/core/state/StateMachine.cpp"
@@ -46,9 +49,13 @@ file(GLOB SOURCES
 "src/states/game/BaseGameState.cpp"
 
 "src/states/game/TestGameState.cpp"
+"src/states/default/options/OptionsState.cpp"
 
 "src/gameObjects/player/TestPlayer.cpp"
+
 "src/gameObjects/hud/mainMenu/MainMenuButton.cpp"
+"src/gameObjects/hud/game/GameButton.cpp"
+"src/gameObjects/hud/options/OptionsContainer.cpp"
 )
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY

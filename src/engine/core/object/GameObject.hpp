@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../../DEFINITIONS.hpp"
 #include "../../game/GameComponents.hpp"
 
 namespace Gengine {
