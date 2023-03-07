@@ -18,7 +18,6 @@ namespace Gengine {
         void pause();
         void resume();
     private:
-        void setResolution(std::string option);
         sf::Sprite _background;
         OptionsContainer _optionsContainer;
         MainMenuButton _backButton;

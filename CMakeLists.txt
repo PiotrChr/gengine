@@ -26,6 +26,7 @@ file(GLOB SOURCES
 "src/engine/core/audio/AudioManager.cpp"
 "src/engine/core/asset/AssetManager.cpp"
 "src/engine/core/input/InputManager.cpp"
+"src/engine/core/gfx/RenderManager.cpp"
 "src/engine/core/object/ObjectManager.cpp"
 "src/engine/core/object/InGameObject.cpp"
 "src/engine/core/object/hud/elements/Button.cpp"

@@ -6,6 +6,7 @@
 #include "../core/input/InputManager.hpp"
 #include "../core/object/ObjectManager.hpp"
 #include "../core/audio/AudioManager.hpp"
+#include "../core/gfx/RenderManager.hpp"
 
 namespace Gengine {
     struct GameComponents {
@@ -15,6 +16,7 @@ namespace Gengine {
         ObjectManager objectManager;
         StateMachine stateMachine;
         AudioManager audioManager;
+        RenderManager renderManager;
     };
 
     typedef std::shared_ptr<GameComponents> GameComponentsRef;

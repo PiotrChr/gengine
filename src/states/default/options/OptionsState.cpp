@@ -170,10 +170,6 @@ namespace Gengine {
         });
     }
 
-    void OptionsState::setResolution(std::string option) {
-        std::cout << "2 Set resolution to " << "123" << std::endl;
-    }
-
     void OptionsState::draw(float dt) {
         _data->windowManager.window->clear(sf::Color::Black);
         _data->windowManager.window->draw(_background);
