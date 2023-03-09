@@ -2,9 +2,10 @@
 
 #include "../../DEFINITIONS.hpp"
 #include "../../game/GameComponents.hpp"
+#include "Entity.hpp"
 
 namespace Gengine {
-    class GameObject
+    class GameObject : public Entity
     {
     public:
         GameObject(GameComponentsRef data) : _data(data) {};

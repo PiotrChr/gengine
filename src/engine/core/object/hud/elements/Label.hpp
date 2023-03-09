@@ -7,7 +7,7 @@ namespace Gengine {
     class Label : public HudObject {
         public:
             Label(
-                GameComponentsRef& data,
+                GameComponentsRef data,
                 std::string text,
                 sf::Vector2f size,
                 sf::Color color = DEFAULT_HUD_BUTTON_FONT_COLOR,
@@ -30,6 +30,8 @@ namespace Gengine {
             sf::Vector2f _size= {0.f, 0.f};
             sf::Vector2f _padding;
             sf::Text _text;
+            std::string _fontPath;
+            std::string _textString;
             sf::Color _color;
             sf::Color _hoverColor;
             sf::Rect<float> _bounds;

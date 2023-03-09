@@ -8,12 +8,12 @@ namespace Gengine {
     class OptionsContainer {
         public:
             OptionsContainer(
-                GameComponentsRef& data,
+                GameComponentsRef data,
                 sf::Vector2f elementSize,
                 float elementSpacing,
                 sf::Vector2f padding
             );
-            OptionsContainer(GameComponentsRef& data) : _data(data) {};
+            OptionsContainer(GameComponentsRef data) : _data(data) {};
             ~OptionsContainer();
 
             void init();
@@ -30,7 +30,7 @@ namespace Gengine {
             sf::Vector2f getSize();
         private:
             std::vector<LabeledDropDown> _options;
-            GameComponentsRef& _data;
+            GameComponentsRef _data;
             sf::Vector2f _position;
             sf::Vector2f _padding;
             sf::Vector2f _size;
@@ -38,5 +38,6 @@ namespace Gengine {
             sf::RectangleShape _background;
             float _elementSpacing;
             sf::Vector2f _elementSize;
+            std::string _openedOption = "";
     };
 }

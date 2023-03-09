@@ -2,7 +2,7 @@
 
 namespace Gengine {
     GameButton::GameButton(
-        GameComponentsRef& data,
+        GameComponentsRef data,
         std::string text,
         sf::Vector2f position,
         std::function<void(void)> clickHandler,

@@ -3,12 +3,16 @@
 #include "LabeledOption.hpp"
 #include "Button.hpp"
 #include "Label.hpp"
+#include "GameRectangle.hpp"
 #include "../../../../DEFINITIONS.hpp"
 
 namespace Gengine {
+    typedef std::shared_ptr<Label> LabelRef;
+    typedef std::shared_ptr<GameRectangle> RectangleRef;
+
     class LabeledDropDown {
     public:
-        LabeledDropDown(GameComponentsRef& data): _data(data) {};
+        LabeledDropDown(GameComponentsRef data): _data(data) {};
         ~LabeledDropDown() {};
 
         void init(
@@ -17,15 +21,17 @@ namespace Gengine {
             std::function<void(std::string)> clickHandler,
             std::vector<std::string> options,
             std::string currentOption,
-            sf::Vector2f padding = {0 ,0},
-            sf::Vector2f dropDownPadding = {0 ,0},
-            sf::Color dropDownBackgroundColor = sf::Color::Transparent,
-            float margin = 0,
-            float buttonMargin = 0,
+            sf::Vector2f padding = DEFAULT_HUD_DROPDOWN_PADDING,
+            sf::Vector2f dropDownPadding = DEFAULT_HUD_DROPDOWN_BUTTON_PADDING,
+            sf::Color dropDownBackgroundColor = DEFAULT_HUD_DROPDOWN_BACKGROUND_COLOR,
+            float margin = DEFAULT_HUD_DROPDOWN_MARGIN,
+            float buttonMargin = DEFAULT_HUD_DROPDOWN_BUTTON_MARGIN,
             sf::Color textColor = DEFAULT_HUD_BUTTON_FONT_COLOR,
             sf::Color hoverColor = DEFAULT_HUD_BUTTON_HOVER_COLOR
         );
         void setCurrentOption(std::string option);
+        void setOnOpen(std::function<void()> onOpen);
+        void setOnClose(std::function<void()> onClose);
         std::string getCurrentOption();
         std::string getText();
         void handleInput(sf::Event event, const float dt);
@@ -33,7 +39,7 @@ namespace Gengine {
         void update(float& dt);
         void draw(sf::RenderTarget* target);
     private:
-        GameComponentsRef& _data;
+        GameComponentsRef _data;
         std::string _text;
         sf::Rect<float> _bounds;
         sf::RectangleShape _background;
@@ -42,12 +48,14 @@ namespace Gengine {
         sf::Vector2f _padding;
         float _margin;
         float _buttonMargin;
-        Label _label;
-        Label _currentOption;
+        LabelRef _label;
+        LabelRef _currentOption;
         sf::Rect<float> _dropDownBounds;
-        sf::RectangleShape _dropDownBackground;
+        RectangleRef _dropDownBackground;
         std::vector<std::shared_ptr<Button>> _options;
         std::function<void(std::string)> _clickHandler;
+        std::function<void()> _onOpen;
+        std::function<void()> _onClose;
         sf::Color _dropDownBackgroundColor;
         sf::Vector2f _dropDownPadding;
         int _buttonSize;
@@ -55,7 +63,7 @@ namespace Gengine {
         int _labelMargin;
         bool _isOpen = false;
     };
-
+    
     typedef std::shared_ptr<LabeledDropDown> LabeledDropDownRef;
     typedef std::shared_ptr<Button> ButtonRef;
 }

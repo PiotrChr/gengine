@@ -32,6 +32,7 @@ file(GLOB SOURCES
 "src/engine/core/object/hud/elements/Button.cpp"
 "src/engine/core/object/hud/elements/Label.cpp"
 "src/engine/core/object/hud/elements/LabeledDropDown.cpp"
+"src/engine/core/object/hud/elements/GameRectangle.cpp"
 
 "src/engine/core/state/State.hpp"
 "src/engine/core/state/State.cpp"

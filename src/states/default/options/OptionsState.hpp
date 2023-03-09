@@ -9,11 +9,12 @@
 namespace Gengine {
     class OptionsState : public BaseState {
     public:
-        OptionsState(GameComponentsRef& data);
+        OptionsState(GameComponentsRef data);
         ~OptionsState();
         void init();
         void handleInput(sf::Event event, const float dt);
         void update(float dt);
+        void cleanup();
         void draw(float dt);
         void pause();
         void resume();
@@ -25,5 +26,7 @@ namespace Gengine {
         MainMenuButton _applyButton;
         SettingsLoader* _settingsLoader;
         bool _dirty = false;
+
+        std::string boolToOption(bool value);
     };
 }

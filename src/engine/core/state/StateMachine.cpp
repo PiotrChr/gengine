@@ -15,6 +15,7 @@ namespace Gengine {
         if (this->_isRemoving == true && !this->_states.empty() ) {
             std::cout << "Removing state" << std::endl;
             this->_isRemoving = false;
+            this->getActiveState()->cleanup();
             this->_states.pop();
 
             if (!this->_states.empty()) {

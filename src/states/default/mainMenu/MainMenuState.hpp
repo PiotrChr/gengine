@@ -7,10 +7,11 @@
 namespace Gengine {
     class MainMenuState : public BaseState {
     public:
-        MainMenuState(GameComponentsRef& data): BaseState(data) {};
+        MainMenuState(GameComponentsRef data): BaseState(data) {};
         ~MainMenuState() {};
         void init();
         void handleInput(sf::Event event, const float dt);
+        void cleanup() {};
         void update(float dt);
         void draw(float dt);
         void pause();
