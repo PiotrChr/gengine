@@ -8,7 +8,7 @@ namespace Gengine {
     class Button : public HudObject {
     public:
         Button(
-            GameComponentsRef& data,
+            GameComponentsRef data,
             std::string text,
             sf::Vector2f position,
             sf::Vector2f size,
@@ -60,6 +60,7 @@ namespace Gengine {
         int _textSize;
         sf::Color _textColor;
         sf::Font _font;
+        std::string _fontPath;
 
         bool _hasBorder;
         int _borderSize;

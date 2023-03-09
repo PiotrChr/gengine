@@ -1,7 +1,7 @@
 #include "GameManager.hpp"
 
 namespace Gengine {
-    GameManager::GameManager(GameData gameData) {
+    GameManager::GameManager(GameData gameData) : _data(std::make_shared<GameComponents>()) {
         _game = new Game(gameData, _data);
         _settingsLoader = new SettingsLoader();
     }

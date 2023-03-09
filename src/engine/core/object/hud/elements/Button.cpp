@@ -3,7 +3,7 @@
 
 namespace Gengine {
     Button::Button(
-        GameComponentsRef& data,
+        GameComponentsRef data,
         std::string text,
         sf::Vector2f position,
         sf::Vector2f size,
@@ -27,15 +27,11 @@ namespace Gengine {
             _padding = padding;
             _text = text;
             _size = size;
+            _fontPath = font;
             
             _textColor = textColor;
             _currentTextColor = textColor;
             
-            std::cout << "Loading font: " << font << std::endl;
-            _data->assetManager.loadFont(font, font);
-            
-            _font = _data->assetManager.getFont(font);
-
             _hasBorder = hasBorder;
             _borderSize = borderSize;
             // _borderRadius = borderRadius;
@@ -62,6 +58,9 @@ namespace Gengine {
     Button::~Button() {};
 
     void Button::init() {
+        _data->assetManager.loadFont(_fontPath, _fontPath);
+        _font = _data->assetManager.getFont(_fontPath);
+
         _textObj.setFont(_font);
         _textObj.setString(_text);
         _textObj.setCharacterSize(_textSize);

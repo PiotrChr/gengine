@@ -2,7 +2,7 @@
 #include "../../states/default/splash/SplashState.hpp"
 
 namespace Gengine {
-    Game::Game(GameData gameData, GameComponentsRef& data) : _data(data) {
+    Game::Game(GameData gameData, GameComponentsRef data) : _data(data) {
         _res_w = gameData.width;
         _res_h = gameData.height;
         _title = gameData.title;
@@ -66,10 +66,10 @@ namespace Gengine {
             StateRef &activeState = this->_data->stateMachine.getActiveState();
 
             activeState->handleEvents(dt);
-
+            
             while (accumulator >= dt) {
-                
                 activeState->update(dt);
+                // activeState->resolveRenderOrder();
                 
                 accumulator -= dt;
             }

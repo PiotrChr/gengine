@@ -4,7 +4,7 @@
 namespace Gengine {
 
     OptionsContainer::OptionsContainer(
-        GameComponentsRef& data,
+        GameComponentsRef data,
         sf::Vector2f elementSize,
         float elementSpacing,
         sf::Vector2f padding
@@ -21,12 +21,6 @@ namespace Gengine {
     };
 
     void OptionsContainer::init() {
-        std::cout << "OptionsContainer::init()" << std::endl;
-        // for (int i = 0; i < _options.size(); i++) {
-        //     _options[i].init();
-        // }
-        
-        // calculate final size
         _size = sf::Vector2f(
             _padding.x * 2 + _elementSize.x,
             _padding.y * 2 + _elementSize.y * _options.size() + _elementSpacing * (_options.size() - 1)
@@ -59,7 +53,13 @@ namespace Gengine {
         for (int i = 0; i < _options.size(); i++) {
             LabeledDropDown& option = _options[i];
 
-            option.handleInput(event, dt);
+            if (_openedOption == "") {
+                option.handleInput(event, dt);
+            } else {
+                if (_openedOption == option.getText()) {
+                    option.handleInput(event, dt);
+                }
+            }
         }
     };
 
@@ -102,6 +102,9 @@ namespace Gengine {
     ) {
         LabeledDropDown dropDown = LabeledDropDown(_data);
         dropDown.init(label, _elementSize, clickHandler, options, currentOption);
+        dropDown.setOnOpen([this, label]() { this->_openedOption = label; });
+        dropDown.setOnClose([this]() { this->_openedOption = ""; });
+
         _options.push_back(dropDown);
     };
 
@@ -116,4 +119,6 @@ namespace Gengine {
     void OptionsContainer::setElementSpacing(float spacing) {
         _elementSpacing = spacing;
     };
+
+    
 }

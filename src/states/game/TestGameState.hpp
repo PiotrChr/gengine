@@ -8,7 +8,7 @@
 namespace Gengine {
     class TestGameState : public BaseGameState {
     public:
-        TestGameState(GameComponentsRef& data) : BaseGameState(data), _player(data) {};
+        TestGameState(GameComponentsRef data) : BaseGameState(data), _player(data) {};
         ~TestGameState() {};
         void init();
         void handleInput(sf::Event event, const float dt);

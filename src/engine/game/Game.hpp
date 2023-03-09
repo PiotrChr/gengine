@@ -9,7 +9,7 @@
 namespace Gengine {
     class Game {
     public:
-        Game(GameData gameData, GameComponentsRef& data);
+        Game(GameData gameData, GameComponentsRef data);
         ~Game();
         void init();
         void draw(float dt);

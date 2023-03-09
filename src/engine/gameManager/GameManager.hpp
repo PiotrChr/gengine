@@ -17,7 +17,7 @@ namespace Gengine {
         void resume();
     private:
         Game* _game;
-        GameComponentsRef _data = std::make_shared<GameComponents>();
+        GameComponentsRef _data;
         SettingsLoader* _settingsLoader;
     };
 }

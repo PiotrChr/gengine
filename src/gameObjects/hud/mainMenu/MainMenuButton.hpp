@@ -6,7 +6,7 @@ namespace Gengine {
     class MainMenuButton : public Button {
     public:
         MainMenuButton(
-            GameComponentsRef& data,
+            GameComponentsRef data,
             std::string text,
             sf::Vector2f position,
             std::function<void(void)> clickHandler,

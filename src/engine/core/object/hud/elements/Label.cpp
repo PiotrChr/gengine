@@ -2,7 +2,7 @@
 
 namespace Gengine {
     Label::Label(
-        GameComponentsRef& data,
+        GameComponentsRef data,
         std::string text,
         sf::Vector2f size,
         sf::Color color,
@@ -12,15 +12,15 @@ namespace Gengine {
         this->_size = size;
         this->_color = color;
         this->_hoverColor = hoverColor;
-
-        this->_data->assetManager.loadFont(font, font);
-        
-        this->_text.setFont(_data->assetManager.getFont(font));
-        this->_text.setString(text);
-        
+        this->_fontPath = font;
+        this->_textString = text;
     }
 
     void Label::init() {
+        this->_data->assetManager.loadFont(_fontPath, _fontPath);
+        this->_text.setFont(_data->assetManager.getFont(_fontPath));
+        this->_text.setString(_textString);
+
         std::cout << "Label init" << std::endl;
         std::cout << "Label size: " << _size.y - 2*_padding.y << std::endl;
         this->_text.setCharacterSize(_size.y - 2*_padding.y);

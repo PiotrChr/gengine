@@ -1,29 +1,27 @@
 #include "OptionsState.hpp"
 
 namespace Gengine {
-    OptionsState::OptionsState(GameComponentsRef& data): BaseState(data), _optionsContainer(data) {
+    OptionsState::OptionsState(GameComponentsRef data): BaseState(data), _optionsContainer(data) {
         _settingsLoader = new SettingsLoader();
     };
     
     OptionsState::~OptionsState() {
         delete _settingsLoader;
+        
     }
 
-    void OptionsState::handleInput(sf::Event event, const float dt) {
-        _optionsContainer.handleInput(event, dt);
-        _backButton.handleInput(event, dt);
-        _saveButton.handleInput(event, dt);
-        _applyButton.handleInput(event, dt);
-    }
-
-    void OptionsState::update(float dt) {
-        _optionsContainer.update(dt);
-        _backButton.update(dt);
-        _saveButton.update(dt);
-        _applyButton.update(dt);
+    void OptionsState::cleanup() {
+        std::cout << "Destroying" << std::endl;
+        _data->renderManager.removeAll2DLayers();
+        std::cout << "OptionsState destroyed" << std::endl;
     }
 
     void OptionsState::init() {
+        _data->renderManager.add2DLayer(LAYER_2D_BACKGROUND);
+        _data->renderManager.add2DLayer(LAYER_2D_HUD);
+        _data->renderManager.add2DLayer(LAYER_2D_DROPDOWN_BG);
+        _data->renderManager.add2DLayer(LAYER_2D_DROPDOWN);
+
         _data->assetManager.loadTexture("Main Menu Background", MM_SCENE_BACKGROUND_FILEPATH);
         _background.setTexture(_data->assetManager.getTexture("Main Menu Background"));
         scaleToWindow(_background);
@@ -39,70 +37,50 @@ namespace Gengine {
         _optionsContainer.setPadding({10.f, 10.f});
         _optionsContainer.setElementSpacing(10.f);
 
-        _optionsContainer.addOption(
-            "Resolution",
-            windowModesStrings,
-            _data->windowManager.getResolution(),
+        _optionsContainer.addOption(SETTINGS_RESOLUTION, windowModesStrings, _data->windowManager.getResolution(),
             [this](std::string option) { 
                 std::cout << "Resolution option clicked: " << option << std::endl;
                 this->_optionsContainer.setCurrentOption("Resolution", option);
                 this->_dirty = true;
         });
 
-        _optionsContainer.addOption(
-            "Fullscreen",
-            {"On", "Off"},
-            _data->windowManager.isFullscreen ? "On" : "Off",
+        _optionsContainer.addOption(SETTINGS_FULLSCREEN, SETTINGS_DEFAULT_OPTIONS_BOOL,
+            boolToOption(_data->windowManager.isFullscreen),
             [this](std::string option) { 
                 std::cout << "Fullscreen option clicked: " << option << std::endl;
                 this->_optionsContainer.setCurrentOption("Fullscreen", option);
                 this->_dirty = true;
         });
 
-        _optionsContainer.addOption(
-            "VSync",
-            {"On", "Off"},
-            _data->windowManager.isVsync ? "On" : "Off",
+        _optionsContainer.addOption(SETTINGS_VSYNC, SETTINGS_DEFAULT_OPTIONS_BOOL, boolToOption(_data->windowManager.isVsync),
             [this](std::string option) { 
                 std::cout << "VSync option clicked: " << option << std::endl;
                 this->_optionsContainer.setCurrentOption("VSync", option);
                 this->_dirty = true;
         });
 
-        _optionsContainer.addOption(
-            "Antialiasing",
-            {"On", "Off"},
-            _data->windowManager.antialiasing ? "On" : "Off",
+        _optionsContainer.addOption(SETTINGS_ANTIALIASING, SETTINGS_DEFAULT_OPTIONS_BOOL, boolToOption(_data->windowManager.antialiasing),
             [this](std::string option) { 
                 std::cout << "Antialiasing option clicked: " << option << std::endl;
                 this->_optionsContainer.setCurrentOption("Antialiasing", option);
                 this->_dirty = true;
         });
         
-        _optionsContainer.addOption(
-            "Framerate",
-            {"30", "60", "120", "240", "Unlimited"},
-            std::to_string(_data->windowManager.framerate),
+        _optionsContainer.addOption(SETTINGS_FRAMERATE, SETTINGS_DEFAULT_FRAMERATES, std::to_string(_data->windowManager.framerate),
             [this](std::string option) { 
                 std::cout << "Framerate Limit option clicked: " << option << std::endl;
                 this->_optionsContainer.setCurrentOption("Framerate", option);
                 this->_dirty = true;
         });
 
-        _optionsContainer.addOption(
-            "Music",
-            {"On", "Off"},
-            _data->audioManager.isMusic ? "On" : "Off",
+        _optionsContainer.addOption(SETTINGS_MUSIC, SETTINGS_DEFAULT_OPTIONS_BOOL, boolToOption(_data->audioManager.isMusic),
             [this](std::string option) { 
                 std::cout << "Music option clicked: " << option << std::endl;
                 this->_optionsContainer.setCurrentOption("Music", option);
                 this->_dirty = true;
         });
 
-        _optionsContainer.addOption(
-            "Sound",
-            {"On", "Off"},
-            _data->audioManager.isSound ? "On" : "Off",
+        _optionsContainer.addOption(SETTINGS_SOUND, SETTINGS_DEFAULT_OPTIONS_BOOL, boolToOption(_data->audioManager.isSound),
             [this](std::string option) { 
                 std::cout << "Sound option clicked: " << option << std::endl;
                 this->_optionsContainer.setCurrentOption("Sound", option);
@@ -110,9 +88,7 @@ namespace Gengine {
         });
 
         _saveButton = MainMenuButton(
-            _data,
-            "Save",
-            sf::Vector2f(200, 100),
+            _data, "Save", sf::Vector2f(200, 100),
             [this]() {
                 _data->windowManager.setResolution(_optionsContainer.getCurrentOption("Resolution"));
                 _data->windowManager.setFullscreen(_optionsContainer.getCurrentOption("Fullscreen") == "On");
@@ -122,9 +98,7 @@ namespace Gengine {
         );
         
         _backButton = MainMenuButton(
-            _data,
-            "Back",
-            sf::Vector2f(200, 100),
+            _data, "Back", sf::Vector2f(200, 100),
             [this]() {
                 std::cout << "Back button clicked" << std::endl;
                 _data->stateMachine.removeState();
@@ -132,9 +106,7 @@ namespace Gengine {
         );
 
         _applyButton = MainMenuButton(
-            _data,
-            "Apply",
-            sf::Vector2f(200, 100),
+            _data, "Apply", sf::Vector2f(200, 100),
             [this]() {
                 _data->windowManager.setResolution(
                     _optionsContainer.getCurrentOption("Resolution"),
@@ -149,7 +121,6 @@ namespace Gengine {
         _saveButton.init();
         _applyButton.init();
 
-        // align horizontally save, back and apply buttons to bottom right
         _saveButton.setPosition(sf::Vector2f(
             _data->windowManager.window->getSize().x - _saveButton.getSize().x - 10,
             _data->windowManager.window->getSize().y - _saveButton.getSize().y - 10
@@ -168,25 +139,49 @@ namespace Gengine {
             _data->windowManager.width/2 - _optionsContainer.getSize().x/2,
             100
         });
+
+        _data->renderManager.addTo2DLayer(LAYER_2D_HUD, GameObjectRef(&_applyButton));
+        _data->renderManager.addTo2DLayer(LAYER_2D_HUD, GameObjectRef(&_backButton));
+        _data->renderManager.addTo2DLayer(LAYER_2D_HUD, GameObjectRef(&_saveButton));
     }
 
-    void OptionsState::setResolution(std::string option) {
-        std::cout << "2 Set resolution to " << "123" << std::endl;
+     void OptionsState::handleInput(sf::Event event, const float dt) {
+        _optionsContainer.handleInput(event, dt);
+        _backButton.handleInput(event, dt);
+        _saveButton.handleInput(event, dt);
+        _applyButton.handleInput(event, dt);
+    }
+
+    void OptionsState::update(float dt) {
+        _optionsContainer.update(dt);
+        _backButton.update(dt);
+        _saveButton.update(dt);
+        _applyButton.update(dt);
+        
     }
 
     void OptionsState::draw(float dt) {
         _data->windowManager.window->clear(sf::Color::Black);
         _data->windowManager.window->draw(_background);
 
-        _optionsContainer.draw(_data->windowManager.window, dt);
-        _backButton.draw(_data->windowManager.window);
-        _saveButton.draw(_data->windowManager.window);
-        _applyButton.draw(_data->windowManager.window);
+        for (GameObjectRef item: _data->renderManager.popLayer(LAYER_2D_HUD)) {
+            item->draw(_data->windowManager.window);
+        }
 
+        for (GameObjectRef item: _data->renderManager.popLayer(LAYER_2D_DROPDOWN_BG)) {
+            item->draw(_data->windowManager.window);
+        }
+
+        for (GameObjectRef item: _data->renderManager.popLayer(LAYER_2D_DROPDOWN)) {
+            item->draw(_data->windowManager.window);
+        }
+        
         _data->windowManager.window->display();
     }
 
-    
+    std::string OptionsState::boolToOption(bool value) {
+        return value ? SETTINGS_DEFAULT_OPTIONS_BOOL_TRUE : SETTINGS_DEFAULT_OPTIONS_BOOL_FALSE;
+    }
 
     void OptionsState::pause() {
         std::cout << "OptionsState paused" << std::endl;

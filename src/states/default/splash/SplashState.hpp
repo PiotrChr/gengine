@@ -9,7 +9,7 @@
 namespace Gengine {
     class SplashState : public BaseState {
     public:
-        SplashState(GameComponentsRef& data) : BaseState(data) {};
+        SplashState(GameComponentsRef data) : BaseState(data) {};
         ~SplashState() {};
         void init();
         void handleInput(sf::Event event);
