@@ -27,7 +27,7 @@ namespace Gengine {
             sf::Color clickColor = DEFAULT_HUD_DROPDOWN_CLICK_COLOR,
             int iconPosition = DEFAULT_HUD_BUTTON_ICON_POSITION,
             int iconSize = DEFAULT_HUD_BUTTON_ICON_SIZE
-            );
+        );
         ~Button();
         Button() {};
         void init();

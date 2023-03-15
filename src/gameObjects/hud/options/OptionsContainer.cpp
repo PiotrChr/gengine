@@ -50,9 +50,7 @@ namespace Gengine {
     };
 
     void OptionsContainer::handleInput(sf::Event event, float dt) {
-        for (int i = 0; i < _options.size(); i++) {
-            LabeledDropDown& option = _options[i];
-
+        for (auto& option : _options) {
             if (_openedOption == "") {
                 option.handleInput(event, dt);
             } else {

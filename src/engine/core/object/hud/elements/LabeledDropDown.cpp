@@ -49,8 +49,6 @@ namespace Gengine {
         
         float buttonSize = size.y - 5;
 
-        std::cout << "Button size: " << buttonSize << std::endl;
-
         for (int i = 0; i < options.size(); i++) {
             std::string option = options[i];
             Button button = Button(
@@ -58,7 +56,9 @@ namespace Gengine {
                 option,
                 {0,0},
                 {200, buttonSize},
-                [clickHandler, option]() { clickHandler(option); }
+                [clickHandler, option]() { clickHandler(option); },
+                DEFAULT_HUD_BUTTON_PADDING,
+                false
             );
             
             auto btn = std::make_shared<Button>(button);
@@ -80,7 +80,6 @@ namespace Gengine {
     }
     
     void LabeledDropDown::setCurrentOption(std::string option) {
-        std::cout << "Setting current option to " << option << std::endl;
         _isOpen = false;
         _currentOption->setText(option);
         
@@ -93,19 +92,11 @@ namespace Gengine {
     void LabeledDropDown::handleInput(sf::Event event, const float dt) {
         _label->handleInput(event, dt);
 
-        if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
-            if (_isOpen) {
-                if (_dropDownBounds.contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
-                    _isOpen = true;
-                } else {
-                    _isOpen = false;
-                }
+        if (_data->inputManager.isActionTriggered(event, ACTION_MAIN)) {
+            if (_bounds.contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
+                _isOpen = !_isOpen;
             } else {
-                if (_bounds.contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
-                    _isOpen = true;
-                } else {
-                    _isOpen = false;
-                }                        
+                _isOpen = false;
             }
 
             if (_isOpen) {
@@ -116,18 +107,16 @@ namespace Gengine {
                 }
             } else {
                 _onClose();
-
                 for (auto& option : _options) {
                     _data->renderManager.removeFrom2DLayer(LAYER_2D_DROPDOWN, option.get());
                     _data->renderManager.removeFrom2DLayer(LAYER_2D_DROPDOWN_BG, _dropDownBackground.get());
                 }
             }
-            
         }
 
         if (_isOpen) {
-            for (int i = 0; i < _options.size(); i++) {
-                _options[i]->handleInput(event, dt);
+            for (auto& option : _options) {
+                option->handleInput(event, dt);
             }
         }
 
