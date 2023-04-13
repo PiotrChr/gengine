@@ -2,10 +2,11 @@
 
 #include <SFML/Graphics.hpp>
 #include "../../../engine/core/object/hud/elements/LabeledDropDown.hpp"
+#include "../../../engine/core/object/HudObject.hpp"
 
 namespace Gengine {
 
-    class OptionsContainer {
+    class OptionsContainer : public HudObject {
         public:
             OptionsContainer(
                 GameComponentsRef data,
@@ -13,13 +14,15 @@ namespace Gengine {
                 float elementSpacing,
                 sf::Vector2f padding
             );
-            OptionsContainer(GameComponentsRef data) : _data(data) {};
+            OptionsContainer(GameComponentsRef data) : HudObject(data) {
+
+            };
             ~OptionsContainer();
 
             void init();
-            void handleInput(sf::Event event, float dt);
-            void update(float dt);
-            void draw(sf::RenderTarget* target, float dt);
+            bool handleInput(sf::Event event, float dt);
+            void update(const float& dt);
+            void draw(sf::RenderTarget* target);
             void setCurrentOption(std::string optionName, std::string option);
             std::string getCurrentOption(std::string optionName);
             void setElementSize(sf::Vector2f size);
@@ -29,8 +32,7 @@ namespace Gengine {
             void addOption(std::string label, std::vector<std::string> options, std::string currentOption, std::function<void(std::string)> clickHandler);
             sf::Vector2f getSize();
         private:
-            std::vector<LabeledDropDown> _options;
-            GameComponentsRef _data;
+            std::vector<std::shared_ptr<LabeledDropDown>> _options;
             sf::Vector2f _position;
             sf::Vector2f _padding;
             sf::Vector2f _size;
@@ -40,4 +42,6 @@ namespace Gengine {
             sf::Vector2f _elementSize;
             std::string _openedOption = "";
     };
+
+    typedef std::shared_ptr<LabeledDropDown> LabeledDropDownRef;
 }

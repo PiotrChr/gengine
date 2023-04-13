@@ -1,10 +1,12 @@
+#pragma once 
+
 #include "../../../engine/DEFINITIONS.hpp"
 #include "../../BaseState.hpp"
 #include "../../../engine/game/GameComponents.hpp"
 #include "../../../engine/core/save/SettingsLoader.hpp"
-#include "../../../gameObjects/hud/options/OptionsContainer.hpp"
+#include "../../../engine/core/object/Hud.hpp"
 #include "../../../gameObjects/hud/mainMenu/MainMenuButton.hpp"
-
+#include "../../../gameObjects/hud/options/OptionsContainer.hpp"
 
 namespace Gengine {
     class OptionsState : public BaseState {
@@ -20,10 +22,11 @@ namespace Gengine {
         void resume();
     private:
         sf::Sprite _background;
-        OptionsContainer _optionsContainer;
-        MainMenuButton _backButton;
-        MainMenuButton _saveButton;
-        MainMenuButton _applyButton;
+        Hud _hud;
+        // OptionsContainer _optionsContainer;
+        // MainMenuButton _backButton;
+        // MainMenuButton _saveButton;
+        std::shared_ptr<GameObject> _applyButton;
         SettingsLoader* _settingsLoader;
         bool _dirty = false;
 

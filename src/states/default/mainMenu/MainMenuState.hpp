@@ -1,7 +1,10 @@
+#pragma once
+
 #include "../../../engine/DEFINITIONS.hpp"
 #include "../../BaseState.hpp"
 #include "../../../engine/game/GameComponents.hpp"
 #include "../../../gameObjects/hud/mainMenu/MainMenuButton.hpp"
+#include "../../game/GameSetupState.hpp"
 
 
 namespace Gengine {

@@ -89,29 +89,27 @@ namespace Gengine {
             {_size.x, _size.y}
         );
     };
-    void Button::handleInput(sf::Event event, const float dt) {
-        if (event.type == sf::Event::MouseButtonPressed) {
-            if (event.mouseButton.button == sf::Mouse::Left) {
-                if (_bounds.contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
-                    _isClicked = true;
-                    _clickHandler();
-                }
+    bool Button::handleInput(sf::Event event, const float dt) {
+        if (_bounds.contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
+            if (event.mouseButton.button == sf::Mouse::Left && event.type == sf::Event::MouseButtonPressed) {
+                _isClicked = true;
+                return true;
             }
-        }
-
-        if (event.type == sf::Event::MouseButtonReleased) {
-            if (event.mouseButton.button == sf::Mouse::Left) {
+            if (event.mouseButton.button == sf::Mouse::Left && event.type == sf::Event::MouseButtonReleased) {
+                _clickHandler();
                 _isClicked = false;
+                return true;
             }
-        }
 
-        if (event.type == sf::Event::MouseMoved) {
-            if (_bounds.contains(sf::Vector2f(event.mouseMove.x, event.mouseMove.y))) {
+            if (event.type == sf::Event::MouseMoved) {
                 _isHovered = true;
-            } else {
-                _isHovered = false;
+                return true;
             }
+        } else {
+            _isHovered = false;
         }
+        
+        return false;
     };
 
     void Button::update(const float& dt) {

@@ -1,10 +1,17 @@
 #pragma once
 
+#include "../../DEFINITIONS.hpp"
 #include <iostream>
-#include <SFML/Window.hpp>
-#include <SFML/Graphics.hpp>
+#include <string>
 #include <vector>
 #include <map>
+#include <vulkan/vulkan.h>
+#include <GLFW/glfw3.h>
+#define GLFW_INCLUDE_NONE
+#define GLFW_INCLUDE_VULKAN
+#if (_IS_MAC)
+    #define VK_USE_PLATFORM_MACOS_MVK
+#endif
 
 namespace Gengine {
     class WindowManager {
@@ -13,14 +20,17 @@ namespace Gengine {
         ~WindowManager();
         
         void init(std::string title);
+        void initVulkan();
+        void cleanupVulkan();
+        
         void toggleFullscreen();
         void changeMode();
         void setFullscreen(bool fullscreen);
         void setResolution(std::string resolution, bool fullscreen = false);
         std::string getResolution();
-        std::map<std::string, sf::VideoMode> getVideoModes();
+        std::map<std::string, VkExtent2D> getVideoModes();
         bool isOpen();
-        sf::RenderWindow* window;
+        GLFWwindow* window;
         bool isFullscreen;
         bool isVsync;
         int antialiasing;
@@ -28,9 +38,19 @@ namespace Gengine {
         std::string resolution;
         int width;
         int height;
-        static std::string modeToString(sf::VideoMode mode);
-        static sf::VideoMode stringToMode(std::string mode);
+
+        static std::string extentToString(VkExtent2D extent);
+        static VkExtent2D stringToExtent(std::string extent);
     private:
-        std::map<std::string, sf::VideoMode> _videoModes;
+        void pickPhysicalDevice();
+        void createLogicalDevice();
+        void createSwapChain();
+        void createInstance();
+        bool isDeviceSuitable(VkPhysicalDevice device);
+        std::map<std::string, VkExtent2D> _videoModes;
+        VkPhysicalDevice _physicalDevice = VK_NULL_HANDLE;
+        VkInstance instance;
+        // PFN_vkGetInstanceProcAddr vkGetInstanceProcAddr;
+        // PFN_vkCreateInstance vkCreateInstance;
     };
 }

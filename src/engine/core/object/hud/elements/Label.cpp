@@ -64,17 +64,20 @@ namespace Gengine {
         _bounds = sf::Rect<float>({_position.x, _position.y}, {_size.x, _size.y});
     }
 
-    void Label::handleInput(sf::Event event, const float dt) {
+    bool Label::handleInput(sf::Event event, const float dt) {
         if (event.type == sf::Event::MouseMoved) {
             if (_bounds.contains(sf::Vector2f(event.mouseMove.x, event.mouseMove.y))) {
                 _isHovered = true;
+                return true;
             } else {
                 _isHovered = false;
             }
+
+            return false;
         }
     }
 
-    void Label::update(float& dt) {
+    void Label::update(const float& dt) {
         if (_isHovered) {
             _text.setFillColor(_hoverColor);
         } else {

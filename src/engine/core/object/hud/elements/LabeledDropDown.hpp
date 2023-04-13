@@ -4,15 +4,18 @@
 #include "Button.hpp"
 #include "Label.hpp"
 #include "GameRectangle.hpp"
+#include "../../HudObject.hpp"
 #include "../../../../DEFINITIONS.hpp"
 
 namespace Gengine {
     typedef std::shared_ptr<Label> LabelRef;
     typedef std::shared_ptr<GameRectangle> RectangleRef;
 
-    class LabeledDropDown {
+    class LabeledDropDown : public HudObject {
     public:
-        LabeledDropDown(GameComponentsRef data): _data(data) {};
+        LabeledDropDown(GameComponentsRef data): HudObject(data) {
+
+        };
         ~LabeledDropDown() {};
 
         void init(
@@ -34,12 +37,11 @@ namespace Gengine {
         void setOnClose(std::function<void()> onClose);
         std::string getCurrentOption();
         std::string getText();
-        void handleInput(sf::Event event, const float dt);
+        bool handleInput(sf::Event event, const float dt);
         void setPosition(sf::Vector2f position);
-        void update(float& dt);
+        void update(const float& dt);
         void draw(sf::RenderTarget* target);
     private:
-        GameComponentsRef _data;
         std::string _text;
         sf::Rect<float> _bounds;
         sf::RectangleShape _background;

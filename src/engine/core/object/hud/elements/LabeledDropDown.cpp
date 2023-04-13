@@ -41,11 +41,11 @@ namespace Gengine {
             hoverColor
         );
 
+        this->addChild(_label);
+        this->addChild(_currentOption);
+
         _dropDownBackground = std::make_shared<GameRectangle>(sf::Vector2f(size.x, size.y * options.size()));
         _dropDownBackground->setFillColor(_dropDownBackgroundColor);
-
-        _data->renderManager.addTo2DLayer(LAYER_2D_HUD, _currentOption.get());
-        _data->renderManager.addTo2DLayer(LAYER_2D_HUD, _label.get());
         
         float buttonSize = size.y - 5;
 
@@ -58,12 +58,14 @@ namespace Gengine {
                 {200, buttonSize},
                 [clickHandler, option]() { clickHandler(option); },
                 DEFAULT_HUD_BUTTON_PADDING,
-                false
+                true
             );
             
             auto btn = std::make_shared<Button>(button);
-
+            btn->setZIndex(DROPDOWN_ELEMENTS_LAYER);
+            btn->setActive(false);
             _options.push_back(btn);
+            this->addChild(btn);
         }
 
         _label->init();
@@ -89,50 +91,47 @@ namespace Gengine {
         return _currentOption->getText();
     }
 
-    void LabeledDropDown::handleInput(sf::Event event, const float dt) {
+    bool LabeledDropDown::handleInput(sf::Event event, const float dt) {
         _label->handleInput(event, dt);
+        bool dirty = false;
 
         if (_data->inputManager.isActionTriggered(event, ACTION_MAIN)) {
             if (_bounds.contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
                 _isOpen = !_isOpen;
+                dirty = true;
             } else {
                 _isOpen = false;
             }
 
             if (_isOpen) {
                 _onOpen();
-                for (auto& option : _options) {
-                    _data->renderManager.addTo2DLayer(LAYER_2D_DROPDOWN, option.get());
-                    _data->renderManager.addTo2DLayer(LAYER_2D_DROPDOWN_BG, _dropDownBackground.get());
-                }
             } else {
                 _onClose();
-                for (auto& option : _options) {
-                    _data->renderManager.removeFrom2DLayer(LAYER_2D_DROPDOWN, option.get());
-                    _data->renderManager.removeFrom2DLayer(LAYER_2D_DROPDOWN_BG, _dropDownBackground.get());
-                }
             }
-        }
 
-        if (_isOpen) {
             for (auto& option : _options) {
-                option->handleInput(event, dt);
+                option->setActive(_isOpen);
             }
-        }
 
+            return dirty;
+        }
     }
 
-    void LabeledDropDown::update(float& dt) {
+    void LabeledDropDown::update(const float& dt) {
         _label->update(dt);
         _currentOption->update(dt);
         if (_isOpen) {
-            for (int i = 0; i < _options.size(); i++) {
-                _options[i]->update(dt);
+            for (auto& option : _options) {
+                option->update(dt);
             }
         }
     }
 
-    void LabeledDropDown::draw(sf::RenderTarget* target) {}
+    void LabeledDropDown::draw(sf::RenderTarget* target) {
+        if (_isOpen) {
+            _dropDownBackground->draw(target);
+        }
+    }
 
     void LabeledDropDown::setPosition(sf::Vector2f position) {
         this->_position = position;

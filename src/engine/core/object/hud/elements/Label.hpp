@@ -14,7 +14,7 @@ namespace Gengine {
                 sf::Color hoverColor = DEFAULT_HUD_BUTTON_HOVER_COLOR,
                 std::string font = DEFAULT_HUD_BUTTON_FONT
                 );
-            Label() {};
+            Label(GameComponentsRef data) : HudObject (data) {};
             ~Label() {};
 
             void init();
@@ -22,8 +22,8 @@ namespace Gengine {
             sf::Vector2f getSize();
             void setText(std::string text);
             std::string getText();
-            void handleInput(sf::Event event, const float dt);
-            void update(float& dt);
+            bool handleInput(sf::Event event, const float dt);
+            void update(const float& dt);
             void draw(sf::RenderTarget* target);
         private:
             sf::Vector2f _position = {0.f, 0.f};

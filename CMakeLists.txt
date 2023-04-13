@@ -1,5 +1,4 @@
 cmake_minimum_required(VERSION 3.22)
-cmake_minimum_required(VERSION 3.22)
 project(GEngine)
 set(CMAKE_CXX_STANDARD 17)
 
@@ -9,9 +8,6 @@ endif()
 
 set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
-
-set(CUR_TARGET GEngine)
-# set(CMAKE_SKIP_RPATH TRUE)
 
 file(GLOB SOURCES 
 "src/main.cpp"
@@ -23,41 +19,51 @@ file(GLOB SOURCES
 "src/engine/utils/window.cpp"
 "src/engine/gameManager/GameManager.cpp"
 "src/engine/game/Game.cpp"
-"src/engine/core/audio/AudioManager.cpp"
-"src/engine/core/asset/AssetManager.cpp"
-"src/engine/core/input/InputManager.cpp"
-"src/engine/core/gfx/RenderManager.cpp"
-"src/engine/core/object/ObjectManager.cpp"
-"src/engine/core/object/InGameObject.cpp"
-"src/engine/core/object/hud/elements/Button.cpp"
-"src/engine/core/object/hud/elements/Label.cpp"
-"src/engine/core/object/hud/elements/LabeledDropDown.cpp"
-"src/engine/core/object/hud/elements/GameRectangle.cpp"
+# "src/engine/core/gfx/BlockRenderer.cpp"
+# "src/engine/core/gfx/Cube.cpp"
+# "src/engine/core/gfx/Shader.cpp"
+# "src/engine/core/audio/AudioManager.cpp"
+# "src/engine/core/asset/AssetManager.cpp"
+# "src/engine/core/input/InputManager.cpp"
+# "src/engine/core/object/ObjectManager.cpp"
+# "src/engine/core/object/InGameObject.cpp"
+# "src/engine/core/object/Hud.cpp"
+# "src/engine/core/object/HudObject.cpp"
+# "src/engine/core/object/hud/elements/Button.cpp"
+# "src/engine/core/object/hud/elements/Label.cpp"
+# "src/engine/core/object/hud/elements/LabeledDropDown.cpp"
+# "src/engine/core/object/hud/elements/GameRectangle.cpp"
 
-"src/engine/core/state/State.hpp"
-"src/engine/core/state/State.cpp"
-"src/engine/core/state/StateMachine.cpp"
+# "src/engine/core/state/State.hpp"
+# "src/engine/core/state/State.cpp"
+# "src/engine/core/state/StateMachine.cpp"
 "src/engine/core/window/WindowManager.cpp"
-"src/engine/core/world/generator/WorldGenerator.cpp"
-"src/engine/core/world/loader/WorldLoader.cpp"
-"src/engine/core/save/SaveGameManager.cpp"
-"src/engine/core/save/SettingsLoader.cpp"
-"src/engine/core/audio/AudioManager.cpp"
+# "src/engine/core/world/generator/WorldGenerator.cpp"
+# "src/engine/core/world/generator/CaveGenerator.cpp"
+# "src/engine/core/world/loader/WorldLoader.cpp"
+# "src/engine/core/world/World.cpp"
+# "src/engine/core/world/Chunk.cpp"
+# "src/engine/core/save/SaveGameManager.cpp"
+# "src/engine/core/save/SettingsLoader.cpp"
+# "src/engine/core/audio/AudioManager.cpp"
 
-"src/states/BaseState.cpp"
-"src/states/default/splash/SplashState.cpp"
-"src/states/default/mainMenu/MainMenuState.cpp"
-"src/states/default/quit/QuitState.cpp"
-"src/states/game/BaseGameState.cpp"
+# "src/states/BaseState.cpp"
+# "src/states/default/splash/SplashState.cpp"
+# "src/states/default/mainMenu/MainMenuState.cpp"
+# "src/states/default/quit/QuitState.cpp"
+# "src/states/game/BaseGameState.cpp"
 
-"src/states/game/TestGameState.cpp"
-"src/states/default/options/OptionsState.cpp"
+# "src/states/game/TestGameState.cpp"
+# "src/states/game/GameState.cpp"
+# "src/states/game/GameSetupState.cpp"
+# "src/states/default/options/OptionsState.cpp"
 
-"src/gameObjects/player/TestPlayer.cpp"
+# "src/gameObjects/player/TestPlayer.cpp"
+# "src/gameObjects/player/Player.cpp"
 
-"src/gameObjects/hud/mainMenu/MainMenuButton.cpp"
-"src/gameObjects/hud/game/GameButton.cpp"
-"src/gameObjects/hud/options/OptionsContainer.cpp"
+# "src/gameObjects/hud/mainMenu/MainMenuButton.cpp"
+# "src/gameObjects/hud/game/GameButton.cpp"
+# "src/gameObjects/hud/options/OptionsContainer.cpp"
 )
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY
@@ -68,77 +74,64 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY
   ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
 
 if(TARGET_MAC)
-    set (LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/lib/mac_x64")
-    set (FRAMEWORKS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/frameworks/")
-    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/mac_x64/)
-    
+    set(LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/lib/mac_x64/")
+    set(MOLTENVK_LIBRARY "${LIB_DIR}/libMoltenVK.dylib")
+    set(FRAMEWORKS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/frameworks/")
+    set(INCLUDES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include/mac_x64/")
 elseif(TARGET_WIN)
     set (LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/lib/win_x64")
-    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/win_x64/)
-    
+    set(INCLUDES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include/win_x64/)
 elseif(TARGET_DEB)
     set (LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/lib/deb_x64")
-    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/deb_x64/)
-    
+    set(INCLUDES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include/deb_x64/)    
 elseif(TARGET_RASP_ARM)
     set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/deb_rasp_arm/)
 else()
     message("Target is not set")
 endif()
 
-link_directories(${LIB_DIR})
+# find_package(OpenGL REQUIRED)
 
-# if(TARGET_MAC)
-#     find_package(SFML 2.5 COMPONENTS system window graphics network audio REQUIRED)
-# endif()
-
-# if(TARGET_MAC)
-#     include_directories("include/mac_x64/")
-# elseif(TARGET_DEB)
-#     include_directories("include/deb_x64/")
-# elseif(TARGET_RASP_ARM)
-#     include_directories("include/deb_rasp_arm/")
-# endif()
-
-# add_executable(GEngine ${SOURCES})
+include_directories(${INCLUDES_DIR})
 
 if (TARGET_MAC)
-    add_executable(${CUR_TARGET} MACOSX_BUNDLE ${SOURCES})
+    add_executable(${PROJECT_NAME} MACOSX_BUNDLE ${SOURCES})
 
-    set_target_properties(${CUR_TARGET} PROPERTIES
+    set_target_properties(${PROJECT_NAME} PROPERTIES
         BUNDLE True
-        MACOSX_BUNDLE_GUI_IDENTIFIER com.pchrusciel.${CUR_TARGET}
-        MACOSX_BUNDLE_BUNDLE_NAME ${CUR_TARGET}
+        MACOSX_BUNDLE_GUI_IDENTIFIER com.pchrusciel.${PROJECT_NAME}
+        MACOSX_BUNDLE_BUNDLE_NAME ${PROJECT_NAME}
         MACOSX_BUNDLE_BUNDLE_VERSION "0.1"
         MACOSX_BUNDLE_SHORT_VERSION_STRING "0.1"
         MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/cmake/gengine.plist.in
     )
 else()
-    add_executable(${CUR_TARGET} ${SOURCES})
+    add_executable(${PROJECT_NAME} ${SOURCES})
 endif()
 
-# target_link_libraries(GEngine ${LIBRARIES})
-
-if(TARGET_MAC)
-    target_link_libraries(${CUR_TARGET} "-framework CoreGraphics" "-framework Foundation")
+if (TARGET_MAC)
+    target_link_libraries(${PROJECT_NAME} "${LIB_DIR}/libMoltenVK.dylib")
+    target_link_libraries(${PROJECT_NAME} "-framework CoreGraphics" "-framework Foundation")
+    target_link_libraries(${PROJECT_NAME} ${MOLTENVK_LIB_DIRS})
 endif()
 
-target_link_libraries(${CUR_TARGET} "-L${CMAKE_CURRENT_SOURCE_DIR}/lib/mac_x64")
-target_link_libraries(${CUR_TARGET} "sfml-graphics" "sfml-window" "sfml-system" "sfml-audio")
+target_link_libraries(${PROJECT_NAME} "${LIB_DIR}/libglfw.3.3.dylib")
 
 if(!TARGET_MAC)
-install(
-    TARGETS ${CUR_TARGET}
-    RUNTIME DESTINATION "bin"
-    LIBRARY DESTINATION "lib"
-    ARCHIVE DESTINATION "lib"
-    COMPONENT library
-)
+    install(
+        TARGETS ${PROJECT_NAME}
+        RUNTIME DESTINATION "bin"
+        LIBRARY DESTINATION "lib"
+        ARCHIVE DESTINATION "lib"
+        COMPONENT library
+    )
 endif()
+
 if (TARGET_MAC)
-install(
-    DIRECTORY ${FRAMEWORKS_DIR}
-    DESTINATION ${CMAKE_BINARY_DIR}/Gengine.app/Contents/Frameworks)
+    install(
+        DIRECTORY ${FRAMEWORKS_DIR}
+        DESTINATION ${CMAKE_BINARY_DIR}/Gengine.app/Contents/Frameworks
+    )
 
     install(
         DIRECTORY ${PROJECT_SOURCE_DIR}/lib/mac_x64/
@@ -191,11 +184,3 @@ endif()
 #    resources/shaders/gof.frag
 #    resources/shaders/gof_display.frag
 #    )
-
-if(TARGET_MAC)
-    # set_target_properties(GEngine PROPERTIES LINK_FLAGS "-Wl,-F ${CMAKE_CURRENT_LIST_DIR}/frameworks/")
-elseif(TARGET_DEB)
-    # set_target_properties(GEngine PROPERTIES LINK_FLAGS "-Wl,-F ${CMAKE_CURRENT_LIST_DIR}/frameworks/")
-elseif(TARGET_RASP_ARM)
-    # set_target_properties(GEngine PROPERTIES LINK_FLAGS "-Wl,-F ${CMAKE_CURRENT_LIST_DIR}/frameworks/")
-endif()

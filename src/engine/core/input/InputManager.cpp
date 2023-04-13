@@ -35,7 +35,6 @@ namespace Gengine
         return false;
     }
 
-    
     sf::Vector2f InputManager::getMousePosition(sf::RenderWindow* window) {
         return sf::Vector2f(sf::Mouse::getPosition(*window));
     }

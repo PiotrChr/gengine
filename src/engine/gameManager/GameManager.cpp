@@ -3,7 +3,7 @@
 namespace Gengine {
     GameManager::GameManager(GameData gameData) : _data(std::make_shared<GameComponents>()) {
         _game = new Game(gameData, _data);
-        _settingsLoader = new SettingsLoader();
+        // _settingsLoader = new SettingsLoader();
     }
 
     GameManager::GameManager() {
@@ -11,8 +11,8 @@ namespace Gengine {
     }
 
     void GameManager::init() {
-        _settingsLoader->loadSettings(_data);
-        delete _settingsLoader;
+        // _settingsLoader->loadSettings(_data);
+        // delete _settingsLoader;
         _game->init();
     }
 

@@ -17,7 +17,7 @@ namespace Gengine {
         });        
 
         _playButton = MainMenuButton(_data, "Play", {0, 0}, [this]() {
-            _data->stateMachine.addState(StateRef(new TestGameState(_data)), false);
+            _data->stateMachine.addState(StateRef(new GameSetupState(_data)), false);
         });
         _playButton.init();
         _playButton.setPosition({

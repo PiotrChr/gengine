@@ -8,7 +8,7 @@ namespace Gengine {
         sf::Vector2f elementSize,
         float elementSpacing,
         sf::Vector2f padding
-    ) : _data(data) {
+    ) : HudObject(data) {
         _elementSpacing = elementSpacing;
         _elementSize = elementSize;
         _padding = padding;
@@ -27,68 +27,58 @@ namespace Gengine {
         );
     };
 
-    void OptionsContainer::setCurrentOption(std::string optionName, std::string option) {
-        for (int i = 0; i < _options.size(); i++) {
-            LabeledDropDown& labeledDropDown = _options[i];
-
-            if (labeledDropDown.getText() == optionName) {
-                labeledDropDown.setCurrentOption(option);
+    void OptionsContainer::setCurrentOption(std::string optionName, std::string currentOption) {
+        for (auto option : _options) {
+            if (option->getText() == optionName) {
+                option->setCurrentOption(currentOption);
             }
         }
     };
 
     std::string OptionsContainer::getCurrentOption(std::string optionName) {
-        for (int i = 0; i < _options.size(); i++) {
-            LabeledDropDown& labeledDropDown = _options[i];
-
-            if (labeledDropDown.getText() == optionName) {
-                return labeledDropDown.getCurrentOption();
+        for (auto option : _options) {
+            if (option->getText() == optionName) {
+                return option->getCurrentOption();
             }
         }
-
+        
         return "";
     };
 
-    void OptionsContainer::handleInput(sf::Event event, float dt) {
-        for (auto& option : _options) {
-            if (_openedOption == "") {
-                option.handleInput(event, dt);
-            } else {
-                if (_openedOption == option.getText()) {
-                    option.handleInput(event, dt);
-                }
-            }
+    bool OptionsContainer::handleInput(sf::Event event, float dt) {
+        // for (auto& option : _options) {
+        //     if (_openedOption == "") {
+        //         option->handleInput(event, dt);
+        //     } else {
+        //         if (_openedOption == option->getText()) {
+        //             option->handleInput(event, dt);
+        //         }
+        //     }
+        // }
+        return false;
+    };
+
+    void OptionsContainer::update(const float& dt) {
+        for (auto option : _options) {
+            option->update(dt);
         }
     };
 
-    void OptionsContainer::update(float dt) {
-        for (int i = 0; i < _options.size(); i++) {
-            LabeledDropDown& option = _options[i];
-
-            option.update(dt);
-        }
-    };
-
-    void OptionsContainer::draw(sf::RenderTarget* target, float dt) {
-        for (int i = 0; i < _options.size(); i++) {
-            LabeledDropDown& option = _options[i];
-
-            option.draw(target);
-        }
+    void OptionsContainer::draw(sf::RenderTarget* target) {
+        
     };
 
     void OptionsContainer::setPosition(sf::Vector2f position) {
         _position = position;
         for (int i = 0; i < _options.size(); i++) {
-            LabeledDropDown& option = _options[i];
+            LabeledDropDownRef option = _options[i];
 
-            option.setPosition(sf::Vector2f(
+            option->setPosition(sf::Vector2f(
                 _position.x,
                 _position.y + (i * (_elementSize.y + _elementSpacing))
             ));
         }
 
-        std::cout << "OptionsContainer::setPosition(" << _position.x << ", " << _position.y << ")" << std::endl;
         _bounds = sf::Rect<float>({_position.x, _position.y}, {_size.x, _size.y});
     };
 
@@ -98,12 +88,14 @@ namespace Gengine {
         std::string currentOption,
         std::function<void(std::string)> clickHandler
     ) {
-        LabeledDropDown dropDown = LabeledDropDown(_data);
-        dropDown.init(label, _elementSize, clickHandler, options, currentOption);
-        dropDown.setOnOpen([this, label]() { this->_openedOption = label; });
-        dropDown.setOnClose([this]() { this->_openedOption = ""; });
+        auto dropDown = std::make_shared<LabeledDropDown>(_data);
+        dropDown->init(label, _elementSize, clickHandler, options, currentOption);
+        dropDown->setOnOpen([this, label]() { this->_openedOption = label; });
+        dropDown->setOnClose([this]() { this->_openedOption = ""; });
 
         _options.push_back(dropDown);
+
+        this->addChild(dropDown);
     };
 
     sf::Vector2f OptionsContainer::getSize() {
@@ -117,6 +109,4 @@ namespace Gengine {
     void OptionsContainer::setElementSpacing(float spacing) {
         _elementSpacing = spacing;
     };
-
-    
 }

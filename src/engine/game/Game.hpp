@@ -2,9 +2,9 @@
 
 #include <memory>
 #include <string>
-#include <SFML/Graphics.hpp>
 #include "GameComponents.hpp"
 #include "../gameManager/GameData.hpp"
+// #include "../../states/default/splash/SplashState.hpp"
 
 namespace Gengine {
     class Game {
@@ -22,7 +22,7 @@ namespace Gengine {
         bool _paused;
         std::string _title;
         const float dt = 1.0f / 60.0f;
-        sf::Clock _clock;
+        // sf::Clock _clock;
         GameComponentsRef _data;
         bool isRunning();
         void run();

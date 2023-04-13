@@ -7,7 +7,7 @@
 namespace Gengine {
     class BaseGameState : public BaseState {
     public:
-        BaseGameState(GameComponentsRef& data) : BaseState(data) {};
+        BaseGameState(GameComponentsRef data) : BaseState(data) {};
         ~BaseGameState() {};
         void init();
         void handleInput(sf::Event event);

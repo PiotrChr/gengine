@@ -48,9 +48,7 @@ namespace Gengine {
         void setClickColor(sf::Color color);
         void setPadding(sf::Vector2f padding);
         void setClickHandler(std::function<void(void)> handler);
-        void handleInput(sf::Event event, const float dt);
-    private:
-        sf::Rect<float> _bounds;
+        bool handleInput(sf::Event event, const float dt);
         sf::Vector2f _size;
         sf::Vector2f _position;
         sf::Vector2f _padding;
@@ -62,19 +60,19 @@ namespace Gengine {
         sf::Font _font;
         std::string _fontPath;
 
-        bool _hasBorder;
+        bool _hasBorder = false;
         int _borderSize;
         // int _borderRadius;
         sf::Color _borderColor;
         sf::RectangleShape _borderObj;
         
-        bool _hasBackground;
+        bool _hasBackground = false;
         sf::Color _backgroundColor;
         
-        bool _isHovered;
+        bool _isHovered = false;
         sf::Color _hoverColor;
         
-        bool _isClicked;
+        bool _isClicked = false;
         sf::Color _clickColor;
 
         bool _hasIcon;

@@ -1,5 +1,4 @@
 #include "Game.hpp"
-#include "../../states/default/splash/SplashState.hpp"
 
 namespace Gengine {
     Game::Game(GameData gameData, GameComponentsRef data) : _data(data) {
@@ -7,8 +6,6 @@ namespace Gengine {
         _res_h = gameData.height;
         _title = gameData.title;
 
-        
-        _data->stateMachine.addState(StateRef(new SplashState(_data)), true);
     }
 
     Game::~Game() {
@@ -32,6 +29,8 @@ namespace Gengine {
     }
 
     void Game::init() {
+        // _data->stateMachine.addState(StateRef(new SplashState(_data)), true);
+        
         std::cout << "Initializing game..." << std::endl;
 
         _data->windowManager.init(_title);
@@ -46,35 +45,35 @@ namespace Gengine {
     void Game::run() {
         float newTime, frameTime, interpolation;
 
-        float currentTime = this->_clock.getElapsedTime().asSeconds();
+        // float currentTime = this->_clock.getElapsedTime().asSeconds();
         float accumulator = 0.0f;
 
         while(this->isRunning()) {
-            this->_data->stateMachine.processStateChanges();
+            // this->_data->stateMachine.processStateChanges();
             
-            newTime = this->_clock.getElapsedTime().asSeconds();
+            // newTime = this->_clock.getElapsedTime().asSeconds();
 
-            frameTime = newTime - currentTime;
+            // frameTime = newTime - currentTime;
 
-            if (frameTime > 0.25f) {
-                frameTime = 0.25f;
-            }
+            // if (frameTime > 0.25f) {
+            //     frameTime = 0.25f;
+            // }
 
-            currentTime = newTime;
-            accumulator += frameTime;
+            // currentTime = newTime;
+            // accumulator += frameTime;
 
-            StateRef &activeState = this->_data->stateMachine.getActiveState();
+            // StateRef &activeState = this->_data->stateMachine.getActiveState();
 
-            activeState->handleEvents(dt);
+            // activeState->handleEvents(dt);
             
-            while (accumulator >= dt) {
-                activeState->update(dt);
+            // while (accumulator >= dt) {
+                // activeState->update(dt);
                 // activeState->resolveRenderOrder();
                 
-                accumulator -= dt;
-            }
-            interpolation = accumulator / dt;
-            activeState->draw(interpolation);
+                // accumulator -= dt;
+            // }
+            // interpolation = accumulator / dt;
+            // activeState->draw(interpolation);
         }
     }
 }
