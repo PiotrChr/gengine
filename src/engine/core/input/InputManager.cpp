@@ -10,47 +10,24 @@ namespace Gengine
 
     }
 
-    bool InputManager::isElemClicked(sf::RectangleShape object, sf::Mouse::Button button, sf::RenderWindow* window) {
-        if (sf::Mouse::isButtonPressed(button)) {
-            
-            sf::Rect tempRect(object.getPosition(), object.getSize());
-
-            if (tempRect.contains(getMousePosition(window))) {
-                return true;
-            }
-        }
-
+    bool InputManager::isElemClicked() {
         return false;
     }
 
-    bool InputManager::isElemClicked(sf::Sprite object, sf::Mouse::Button button, sf::RenderWindow* window) {
-        if (sf::Mouse::isButtonPressed(button)) {
-            sf::Rect tempRect(object.getPosition(), object.getGlobalBounds().getSize());
-
-            if (tempRect.contains(getMousePosition(window))) {
-                return true;
-            }
-        }
-
-        return false;
+    glm::vec2 InputManager::getMousePosition() {
+        return mousePosition;
     }
 
-    sf::Vector2f InputManager::getMousePosition(sf::RenderWindow* window) {
-        return sf::Vector2f(sf::Mouse::getPosition(*window));
+    void InputManager::updateMousePosition(GLFWwindow* window) {
+        double x, y;
+        
+        glfwGetCursorPos(window, &x, &y);
+
+        mousePosition.x = x;
+        mousePosition.y = y;
     }
 
-    bool InputManager::isActionTriggered(sf::Event event, std::string actionName) {
-        if (event.type == sf::Event::KeyPressed) {
-            if (event.key.code == keyBinds[actionName]) {
-                return true;
-            }
-        }
-        else if (event.type == sf::Event::MouseButtonReleased) {
-            if (event.mouseButton.button == mouseBinds[actionName]) {
-                return true;
-            }
-        }
-
+    bool InputManager::isActionTriggered(std::string actionName) {
         return false;
     }
 

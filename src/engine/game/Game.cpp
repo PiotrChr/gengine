@@ -33,7 +33,8 @@ namespace Gengine {
         
         std::cout << "Initializing game..." << std::endl;
 
-        _data->windowManager.init(_title);
+        _data->windowManager.setTitle(_title);
+        _data->windowManager.init();
 
         this->run();
     }
@@ -49,6 +50,7 @@ namespace Gengine {
         float accumulator = 0.0f;
 
         while(this->isRunning()) {
+            glfwPollEvents();
             // this->_data->stateMachine.processStateChanges();
             
             // newTime = this->_clock.getElapsedTime().asSeconds();

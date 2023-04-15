@@ -1,7 +1,5 @@
 #pragma once
 
-#include <SFML/Audio.hpp>
-
 namespace Gengine {
     class AudioManager
     {
@@ -44,8 +42,8 @@ namespace Gengine {
         int musicVolume;
         int soundVolume;
     private:
-        sf::Music _music;
-        sf::Sound _sound;
-        sf::SoundBuffer _soundBuffer;
+        // sf::Music _music;
+        // sf::Sound _sound;
+        // sf::SoundBuffer _soundBuffer;
     };
 }

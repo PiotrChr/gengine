@@ -4,7 +4,7 @@
 #include "../game/Game.hpp"
 #include "GameData.hpp"
 #include "../game/GameComponents.hpp"
-// #include "../core/save/SettingsLoader.hpp"
+#include "../core/save/SettingsLoader.hpp"
 
 namespace Gengine {
     class GameManager {
@@ -18,6 +18,6 @@ namespace Gengine {
     private:
         Game* _game;
         GameComponentsRef _data;
-        // SettingsLoader* _settingsLoader;
+        SettingsLoader* _settingsLoader;
     };
 }

@@ -24,8 +24,10 @@ namespace Gengine {
         isFullscreen = fullscreen;
     }
 
-    void WindowManager::init(std::string title) {
-        glfwInit();
+    void WindowManager::initGLFW() {
+        if (!glfwInit()) {
+            throw std::runtime_error("Failed to initialize GLFW");
+        }
 
         #if _IS_MAC
             /* We need to explicitly ask for a 3.2 context on OS X */
@@ -37,26 +39,54 @@ namespace Gengine {
 
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+    }
 
+    GLFWAPI GLFWwindow* WindowManager::createWindow() {
         if (isFullscreen) {
-            window = glfwCreateWindow(width, height, title.c_str(), glfwGetPrimaryMonitor(), nullptr);
+            return glfwCreateWindow(width, height, title.c_str(), glfwGetPrimaryMonitor(), nullptr);
+        } else {
+            return glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
         }
-        else {
-            window = glfwCreateWindow(width, height, title.c_str(), glfwGetPrimaryMonitor(), nullptr);
-            std::cout << "s" << std::endl;
+    }
+    
+    void WindowManager::init() {
+        try {
+            this->initGLFW();
+        } catch (const std::exception& e) {
+            std::cerr << e.what() << std::endl;
+            glfwTerminate();
+        }
+
+        window = this->createWindow();
+
+        if (!window) {
+            glfwTerminate();
+            throw std::runtime_error("Failed to create GLFW window");
         }
 
         glfwMakeContextCurrent(window);
 
+        try {
+            initVulkan();
+        } catch (const std::exception& e) {
+            std::cerr << e.what() << std::endl;
+            glfwDestroyWindow(window);
+            glfwTerminate();
+        }
+    }
 
-        initVulkan();
+    void WindowManager::cleanup() {
+        this->cleanupVulkan();
+        vkDestroyInstance(instance, nullptr);
+        glfwDestroyWindow(window);
+        glfwTerminate();
     }
 
     void WindowManager::initVulkan() {
         createInstance();
-        pickPhysicalDevice();
-        createLogicalDevice();
-        createSwapChain();
+        // pickPhysicalDevice();
+        // createLogicalDevice();
+        // createSwapChain();
     }
 
     void WindowManager::pickPhysicalDevice() {
@@ -83,7 +113,6 @@ namespace Gengine {
     }
 
     bool WindowManager::isDeviceSuitable(VkPhysicalDevice device) {
-        
         return true;
     }
 
@@ -107,6 +136,10 @@ namespace Gengine {
 
     void WindowManager::changeMode() {
         // TODO: Implement
+    }
+
+    void WindowManager::setTitle(std::string title) {
+        this->title = title;
     }
 
     std::map<std::string, VkExtent2D> WindowManager::getVideoModes() {
@@ -146,7 +179,7 @@ namespace Gengine {
         appInfo.pApplicationName = "Gengine";
         appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
         appInfo.pEngineName = "No Engine";
-        appInfo.engineVersion = VK_MAKE_VERSION(0, 0, 0);
+        appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
         appInfo.apiVersion = VK_API_VERSION_1_2;
 
         VkInstanceCreateInfo createInfo = {};
@@ -155,7 +188,6 @@ namespace Gengine {
 
         uint32_t glfwExtensionCount = 0;
         const char** glfwExtensions;
-
         glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
         
         // Check if the required extensions are available

@@ -19,17 +19,26 @@ namespace Gengine {
         WindowManager() {};
         ~WindowManager();
         
-        void init(std::string title);
+        void init();
+        void initGLFW();
         void initVulkan();
+
         void cleanupVulkan();
-        
+        void cleanup();
+
+        GLFWAPI GLFWwindow* createWindow();
         void toggleFullscreen();
+        void setTitle(std::string title);
         void changeMode();
         void setFullscreen(bool fullscreen);
         void setResolution(std::string resolution, bool fullscreen = false);
         std::string getResolution();
         std::map<std::string, VkExtent2D> getVideoModes();
         bool isOpen();
+
+        static std::string extentToString(VkExtent2D extent);
+        static VkExtent2D stringToExtent(std::string extent);
+
         GLFWwindow* window;
         bool isFullscreen;
         bool isVsync;
@@ -38,10 +47,8 @@ namespace Gengine {
         std::string resolution;
         int width;
         int height;
-
-        static std::string extentToString(VkExtent2D extent);
-        static VkExtent2D stringToExtent(std::string extent);
     private:
+        std::string title;
         void pickPhysicalDevice();
         void createLogicalDevice();
         void createSwapChain();
@@ -50,7 +57,6 @@ namespace Gengine {
         std::map<std::string, VkExtent2D> _videoModes;
         VkPhysicalDevice _physicalDevice = VK_NULL_HANDLE;
         VkInstance instance;
-        // PFN_vkGetInstanceProcAddr vkGetInstanceProcAddr;
-        // PFN_vkCreateInstance vkCreateInstance;
+        VkDevice device;
     };
 }
