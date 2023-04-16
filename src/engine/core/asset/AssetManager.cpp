@@ -1,8 +1,4 @@
 #include "AssetManager.hpp"
-#if _IS_MAC
-    #include <mach-o/dyld.h>
-#endif
-#include <iostream>
 
 namespace Gengine {
     AssetManager::AssetManager() {
@@ -28,30 +24,32 @@ namespace Gengine {
     }
     
     void AssetManager::loadTexture(std::string name, std::string filePath) {
-        sf::Texture tex;
+        VkImage tex;
 
-        if (this->_textures.find(name) == this->_textures.end()) {
-            if (tex.loadFromFile(getFilePath(filePath))) {
-                this->_textures[name] = tex;
-            }
-        }
+        // TODO: Load texture using Vulkan
     }
 
-    sf::Texture& AssetManager::getTexture(std::string name) {
+    VkImage& AssetManager::getTexture(std::string name) {
         return this->_textures.at(name);
     }
 
     void AssetManager::loadFont(std::string name, std::string filePath) {
-        sf::Font font;
+        FT_Library ft;
 
-        if (this->_fonts.find(name) == this->_fonts.end()) {
-            if (font.loadFromFile(getFilePath(filePath))) {
-                this->_fonts[name] = font;
-            }
+        if (FT_Init_FreeType(&ft)) {
+            throw std::runtime_error("Could not initialize FreeType library.");
         }
+
+        FT_Face face;
+        if (FT_New_Face(ft, getFilePath(filePath).c_str(), 0, &face)) {
+            throw std::runtime_error("Could not load font: " + filePath);
+        }
+
+        // Store the font in the map
+        this->_fonts[name] = face;
     }
 
-    sf::Font& AssetManager::getFont(std::string name) {
+    FT_Face& AssetManager::getFont(std::string name) {
         if (this->_fonts.find(name) != this->_fonts.end()) {
             return this->_fonts.at(name);
         }

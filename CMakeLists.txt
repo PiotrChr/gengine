@@ -23,7 +23,7 @@ file(GLOB SOURCES
 # "src/engine/core/gfx/Cube.cpp"
 # "src/engine/core/gfx/Shader.cpp"
 "src/engine/core/audio/AudioManager.cpp"
-# "src/engine/core/asset/AssetManager.cpp"
+"src/engine/core/asset/AssetManager.cpp"
 "src/engine/core/input/InputManager.cpp"
 # "src/engine/core/object/ObjectManager.cpp"
 # "src/engine/core/object/InGameObject.cpp"
@@ -116,6 +116,7 @@ if (TARGET_MAC)
 endif()
 
 target_link_libraries(${PROJECT_NAME} "${LIB_DIR}/libglfw.3.3.dylib")
+target_link_libraries(${PROJECT_NAME} "${LIB_DIR}/libfreetype.6.dylib")
 
 if(!TARGET_MAC)
     install(

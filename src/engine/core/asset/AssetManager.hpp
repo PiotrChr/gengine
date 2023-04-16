@@ -1,8 +1,14 @@
 #pragma once
 
 #include <map>
-#include <SFML/Graphics.hpp>
+#include <vulkan/vulkan.h>
+#include <iostream>
+#include <ft2build.h>
+#include FT_FREETYPE_H
 #include "../../globals.hpp"
+#if _IS_MAC
+    #include <mach-o/dyld.h>
+#endif
 
 namespace Gengine {
     class AssetManager {
@@ -11,13 +17,13 @@ namespace Gengine {
         ~AssetManager();
 
         void loadTexture(std::string name, std::string filePath);
-        sf::Texture& getTexture(std::string name);
+        VkImage& getTexture(std::string name);
 
         void loadFont(std::string name, std::string filePath);
-        sf::Font& getFont(std::string name);
+        FT_Face& getFont(std::string name);
     private:
         std::string getFilePath(std::string relativePath);
-        std::map<std::string, sf::Texture> _textures;    
-        std::map<std::string, sf::Font> _fonts;    
+        std::map<std::string, VkImage> _textures;    
+        std::map<std::string, FT_Face> _fonts;    
     };
 }
