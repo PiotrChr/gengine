@@ -1,7 +1,7 @@
 #include "World.hpp"
 
 namespace Gengine {
-    sf::Vector3i World::getPlayerChunkPosition() {
+    const glm::ivec3& World::getPlayerChunkPosition() {
         Player* player = m_players[0];
         
         return player->getChunkPosition();
@@ -40,14 +40,14 @@ namespace Gengine {
     }
 
     void World::update(float dt) {
-        sf::Vector3i playerChunkPosition = getPlayerChunkPosition();
+        glm::ivec3 playerChunkPosition = getPlayerChunkPosition();
 
         // Load and unload chunks around the player
         for (int x = playerChunkPosition.x - CHUNK_UNLOAD_RADIUS; x <= playerChunkPosition.x + CHUNK_UNLOAD_RADIUS; x++) {
             for (int y = playerChunkPosition.y - CHUNK_UNLOAD_RADIUS; y <= playerChunkPosition.y + CHUNK_UNLOAD_RADIUS; y++) {
                 for (int z = playerChunkPosition.z - CHUNK_UNLOAD_RADIUS; z <= playerChunkPosition.z + CHUNK_UNLOAD_RADIUS; z++) {
                     if (isInWorldHeightBounds(z)) {
-                        sf::Vector3i chunkPos(x, y, z);
+                        glm::ivec3 chunkPos(x, y, z);
                         bool isChunkLoaded = m_worldLoader.isChunkLoaded(chunkPos);
 
                         int dx = x - playerChunkPosition.x;
@@ -65,9 +65,9 @@ namespace Gengine {
         }
     }
 
-    int World::getBlock(sf::Vector3i blockPosition) {
+    int World::getBlock(const glm::ivec3& blockPosition) {
        // Get the chunk index
-        sf::Vector3i chunkPosition(
+        glm::ivec3 chunkPosition(
             std::floor(blockPosition.x / m_chunkWidthInBlocks),
             std::floor(blockPosition.y / m_chunkHeightInBlocks),
             std::floor(blockPosition.z / m_chunkDepthInBlocks)
@@ -80,20 +80,20 @@ namespace Gengine {
     }
 
     std::vector<std::pair<Chunk*, float>> World::getSortedChunks() {
-        sf::Vector3i playerChunkPosition = getPlayerChunkPosition();
+        glm::ivec3 playerChunkPosition = getPlayerChunkPosition();
 
         // Create a vector of pairs containing chunk pointers and their distances to the player
         std::vector<std::pair<Chunk*, float>> sortedChunks;
 
         for (const auto& chunkPair : m_chunks) {
             Chunk* chunk = chunkPair.second;
-            sf::Vector3i chunkPosition(
+            glm::ivec3 chunkPosition(
                 chunk->getX() * m_chunkWidthInBlocks,
                 chunk->getY() * m_chunkHeightInBlocks,
                 chunk->getZ() * m_chunkDepthInBlocks
             );
 
-            sf::Vector3i delta = playerChunkPosition - chunkPosition;
+            glm::ivec3 delta = playerChunkPosition - chunkPosition;
             float distanceSquared = delta.x * delta.x + delta.y * delta.y + delta.z * delta.z;
 
             sortedChunks.push_back(std::make_pair(chunk, distanceSquared));
@@ -107,44 +107,22 @@ namespace Gengine {
         return sortedChunks;
     }
 
-    void World::draw(sf::RenderTarget* target) {
+    void World::draw() {
         auto chunks = getSortedChunks();
 
-        for (const auto& chunkPair :chunks) {
-            Chunk* chunk = chunkPair.first;
-            auto blocks = chunk->getBlocks();
-            
-            for (int i=0; i < blocks->size(); i++) {
-                int blockType = blocks->at(i);
-                if (blockType != BlockTypes::Air) {
-                    m_blockRenderer.drawBlock(blockType, chunk->getChunkPosition(), i, target);
-                }
-            }
-        }
+        // Draw the chunks
     }
 
-    bool World::isBlockVisible(const sf::Vector3i& blockPosition) {
+    bool World::isBlockVisible(const glm::ivec3& blockPosition) {
         // implement later
         return true;
-    }
-
-    int World::getWorldHeightInChunks() const {
-        return m_worldHeightInChunks;
-    }
-
-    int World::getWorldWidthInChunks() const {
-        return m_worldWidthInChunks;
-    }
-
-    int World::getWorldDepthInChunks() const {
-        return m_worldDepthInChunks;
     }
 
     int World::getNumChunks() const {
         return m_chunks.size();
     }
 
-    Chunk* World::getChunk(sf::Vector3i chunkPosition) {
+    Chunk* World::getChunk(const glm::ivec3& chunkPosition) {
         // Find the corresponding chunk
         auto it = m_chunks.find(chunkPosition);
         if (it == m_chunks.end()) {
@@ -154,23 +132,11 @@ namespace Gengine {
         return it->second;
     }
 
-    int World::getChunkWidthInBlocks() const {
-        return m_chunkWidthInBlocks;
-    }
-
-    int World::getChunkHeightInBlocks() const {
-        return m_chunkHeightInBlocks;
-    }
-
-    int World::getChunkDepthInBlocks() const {
-        return m_chunkDepthInBlocks;
-    }
-
     void World::addChunk(Chunk* chunk) {
         m_chunks[chunk->getChunkPosition()] = chunk;
     }
 
-    void World::setBlock(sf::Vector3i blockPosition, int blockType) {
+    void World::setBlock(const glm::ivec3& blockPosition, int blockType) {
         // Get the chunk index
         int chunkX = blockPosition.x / m_chunkWidthInBlocks;
         int chunkY = blockPosition.y / m_chunkHeightInBlocks;
@@ -186,7 +152,7 @@ namespace Gengine {
         chunk->setBlock({blockX, blockY, blockZ}, blockType);
     }
 
-    std::unordered_map<sf::Vector3i, Chunk*, Vector3iHash> World::getChunks() {
+    ChunkMap World::getChunks() {
         return m_chunks;
     }
 

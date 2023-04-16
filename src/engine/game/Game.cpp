@@ -51,31 +51,7 @@ namespace Gengine {
 
         while(this->isRunning()) {
             glfwPollEvents();
-            // this->_data->stateMachine.processStateChanges();
             
-            // newTime = this->_clock.getElapsedTime().asSeconds();
-
-            // frameTime = newTime - currentTime;
-
-            // if (frameTime > 0.25f) {
-            //     frameTime = 0.25f;
-            // }
-
-            // currentTime = newTime;
-            // accumulator += frameTime;
-
-            // StateRef &activeState = this->_data->stateMachine.getActiveState();
-
-            // activeState->handleEvents(dt);
-            
-            // while (accumulator >= dt) {
-                // activeState->update(dt);
-                // activeState->resolveRenderOrder();
-                
-                // accumulator -= dt;
-            // }
-            // interpolation = accumulator / dt;
-            // activeState->draw(interpolation);
         }
     }
 }

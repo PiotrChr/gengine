@@ -1,7 +1,7 @@
 #include "WorldLoader.hpp"
 
 namespace Gengine {
-    Chunk* WorldLoader::loadChunk(sf::Vector3i position) {
+    Chunk* WorldLoader::loadChunk(const glm::ivec3& position) {
         // Check if the chunk is already loaded
         auto it = m_loadedChunks.find(position);
         if (it != m_loadedChunks.end()) {
@@ -18,9 +18,9 @@ namespace Gengine {
 
         Chunk* chunk = new Chunk(position);
 
-        for (int i = 0; i < chunk->getWidth(); i++) {
-            for (int j = 0; j < chunk->getHeight(); j++) {
-                for (int k = 0; k < chunk->getDepth(); k++) {
+        for (int i = 0; i < CHUNK_SIZE_X; i++) {
+            for (int j = 0; j < CHUNK_SIZE_Y; j++) {
+                for (int k = 0; k < CHUNK_SIZE_Z; k++) {
                     int blockType = 0;
                     file.read((char*)&blockType, sizeof(int));
                     chunk->setBlock({i, j, k}, blockType);
@@ -53,9 +53,9 @@ namespace Gengine {
             return;
         }
 
-        for (int i = 0; i < chunk->getWidth(); i++) {
-            for (int j = 0; j < chunk->getHeight(); j++) {
-                for (int k = 0; k < chunk->getDepth(); k++) {
+        for (int i = 0; i < CHUNK_SIZE_X; i++) {
+            for (int j = 0; j < CHUNK_SIZE_Y; j++) {
+                for (int k = 0; k < CHUNK_SIZE_Z; k++) {
                     int blockType = chunk->getBlock({i, j, k});
                     file.write((char*)&blockType, sizeof(int));
                 }
@@ -76,7 +76,7 @@ namespace Gengine {
         }
     }
 
-    bool WorldLoader::isChunkLoaded(sf::Vector3i position) {
+    bool WorldLoader::isChunkLoaded(const glm::ivec3& position) {
         // Check if a chunk is loaded
         for (const auto& chunk_pair : m_loadedChunks) {
             if (chunk_pair.first == position) {
@@ -87,14 +87,14 @@ namespace Gengine {
         return false;
     }
 
-    void WorldLoader::saveWorld(std::unordered_map<sf::Vector3i, Chunk*, Vector3iHash> chunks) {
+    void WorldLoader::saveWorld(ChunkMap chunks) {
         for (const auto& chunk_pair : chunks) {
             Chunk* chunk = chunk_pair.second;
             saveChunk(chunk);
         }
     }
 
-    void WorldLoader::unloadChunk(sf::Vector3i position) {
+    void WorldLoader::unloadChunk(const glm::ivec3& position) {
         // Unload a chunk at specified location
         for (auto it = m_loadedChunks.begin(); it != m_loadedChunks.end(); ++it) {
             if (it->first == position) {

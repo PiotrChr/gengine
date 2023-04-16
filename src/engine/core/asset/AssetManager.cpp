@@ -23,10 +23,13 @@ namespace Gengine {
         #endif        
     }
     
-    void AssetManager::loadTexture(std::string name, std::string filePath) {
-        VkImage tex;
+    void AssetManager::loadTexture(const std::string name, const std::string filePath) {
+        ImageLoader::ImageData imageData = ImageLoader::loadImage(filePath);
+        
+        // Use imageData.width, imageData.height, imageData.channels, and imageData.data to create a Vulkan image.
+        // ...
 
-        // TODO: Load texture using Vulkan
+        ImageLoader::freeImageData(imageData);
     }
 
     VkImage& AssetManager::getTexture(std::string name) {

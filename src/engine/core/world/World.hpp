@@ -1,6 +1,5 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
 #include <vector>
 #include "../../DEFINITIONS.hpp"
 #include "Chunk.hpp"
@@ -22,39 +21,23 @@ namespace Gengine {
         void init();
 
         // Draw the world
-        void draw(sf::RenderTarget* target);
+        void draw();
 
         // Get a block at the specified block coordinates
-        int getBlock(sf::Vector3i blockPosition);
+        int getBlock(const glm::ivec3& blockPosition);
 
         // Set a block at the specified block coordinates
-        void setBlock(sf::Vector3i blockPosition, int blockType);
+        void setBlock(const glm::ivec3& blockPosition, int blockType);
 
         // Get the chunk at the specified chunk coordinates
         void setChunk(Chunk* chunk);
 
         // Get the chunk at the specified chunk coordinates
-        Chunk* getChunk(sf::Vector3i chunkPosition);
+        Chunk* getChunk(const glm::ivec3& chunkPosition);
 
-        // Get the chunk at the specified block coordinates
-        std::unordered_map<sf::Vector3i, Chunk*, Vector3iHash> getChunks();
+        ChunkMap getChunks();
 
         void addChunk(Chunk* chunk);
-
-        int getWorldHeightInChunks() const;
-
-        int getWorldWidthInChunks() const;
-
-        int getWorldDepthInChunks() const;
-
-        // Get the width of a chunk in blocks
-        int getChunkWidthInBlocks() const;
-
-        // Get the height of a chunk in blocks
-        int getChunkHeightInBlocks() const;
-
-        // Get the depth of a chunk in blocks
-        int getChunkDepthInBlocks() const;
 
         // Get the number of chunks in the world
         int getNumChunks() const;
@@ -62,9 +45,9 @@ namespace Gengine {
         void addPlayer(Player* player);
     private:
         std::vector<std::pair<Chunk*, float>> getSortedChunks();
-        bool isBlockVisible (const sf::Vector3i& blockPosition);
+        bool isBlockVisible (const glm::ivec3& blockPosition);
 
-        sf::Vector3i getPlayerChunkPosition();
+        const glm::ivec3& getPlayerChunkPosition();
 
         bool isInWorldHeightBounds(int z);
         bool isWithinLoadRadius(int dx, int dy, int dz);
@@ -81,7 +64,7 @@ namespace Gengine {
         int m_chunkDepthInBlocks;
 
         // Vector to store all the chunks in the world
-        std::unordered_map<sf::Vector3i, Chunk*, Vector3iHash> m_chunks;
+        ChunkMap m_chunks;
 
         // World loader for loading and unloading chunks
         WorldLoader m_worldLoader;

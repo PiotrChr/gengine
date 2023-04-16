@@ -1,8 +1,8 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
 #include "../../engine/game/GameComponents.hpp"
 #include "../../engine/DEFINITIONS.hpp"
+#include "glm/glm.hpp"
 
 namespace Gengine {
     class Player {
@@ -10,17 +10,16 @@ namespace Gengine {
         Player(GameComponentsRef data);
         ~Player() {};
 
-        void setPositionInBlocks(const sf::Vector3i& position);
-        sf::Vector3i getBlockPosition();
-        
-        sf::Vector3i getChunkPosition();
+        void setPositionInBlocks(glm::ivec3& position);
+        glm::ivec3& getBlockPosition();
+        glm::ivec3 getChunkPosition();
 
         void update(float dt);
-        void draw(sf::RenderTarget* target);
-        void handleInput(sf::Event event, const float dt);
+        void draw();
+        void handleInput();
 
     private:
-        sf::Vector3i _blockPosition;
+        glm::ivec3 _blockPosition;
         GameComponentsRef _data;
     };
 }

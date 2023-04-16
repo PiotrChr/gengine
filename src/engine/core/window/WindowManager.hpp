@@ -39,6 +39,9 @@ namespace Gengine {
         static std::string extentToString(VkExtent2D extent);
         static VkExtent2D stringToExtent(std::string extent);
 
+        VkPhysicalDeviceProperties getPhysicalDeviceProperties(VkPhysicalDevice device);
+        VkPhysicalDeviceFeatures gertPhysicalDeviceFeatures(VkPhysicalDevice device);
+
         GLFWwindow* window;
         bool isFullscreen;
         bool isVsync;
@@ -53,7 +56,7 @@ namespace Gengine {
         void createLogicalDevice();
         void createSwapChain();
         void createInstance();
-        bool isDeviceSuitable(VkPhysicalDevice device);
+        int rateDeviceSuitability(VkPhysicalDevice device);
         std::map<std::string, VkExtent2D> _videoModes;
         VkPhysicalDevice _physicalDevice = VK_NULL_HANDLE;
         VkInstance instance;

@@ -84,7 +84,7 @@ namespace Gengine {
 
     void WindowManager::initVulkan() {
         createInstance();
-        // pickPhysicalDevice();
+        pickPhysicalDevice();
         // createLogicalDevice();
         // createSwapChain();
     }
@@ -100,20 +100,61 @@ namespace Gengine {
         std::vector<VkPhysicalDevice> devices(deviceCount);
         vkEnumeratePhysicalDevices(instance, &deviceCount, devices.data());
 
+        // Use an ordered map to automatically sort devices by score
+        std::multimap<int, VkPhysicalDevice> candidates;
+
         for (const auto& device : devices) {
-            if (isDeviceSuitable(device)) {
-                _physicalDevice = device;
-                break;
-            }
+            int score = rateDeviceSuitability(device);
+            candidates.insert(std::make_pair(score, device));
         }
 
-        if (_physicalDevice == VK_NULL_HANDLE) {
+        // Check if the best candidate is suitable at all
+        if (candidates.rbegin()->first > 0) {
+            _physicalDevice = candidates.rbegin()->second;
+        } else {
             throw std::runtime_error("Failed to find a suitable GPU!");
         }
     }
 
-    bool WindowManager::isDeviceSuitable(VkPhysicalDevice device) {
-        return true;
+    VkPhysicalDeviceFeatures WindowManager::gertPhysicalDeviceFeatures(VkPhysicalDevice device) {
+        VkPhysicalDeviceFeatures deviceFeatures;
+        vkGetPhysicalDeviceFeatures(device, &deviceFeatures);
+
+        return deviceFeatures;
+    }
+
+    VkPhysicalDeviceProperties WindowManager::getPhysicalDeviceProperties(VkPhysicalDevice device) {
+        VkPhysicalDeviceProperties deviceProperties;
+        vkGetPhysicalDeviceProperties(device, &deviceProperties);
+
+        return deviceProperties;
+    }
+
+    int WindowManager::rateDeviceSuitability(VkPhysicalDevice device) {
+        VkPhysicalDeviceProperties deviceProperties = getPhysicalDeviceProperties(device);
+        VkPhysicalDeviceFeatures deviceFeatures = gertPhysicalDeviceFeatures(device);
+        
+        // Don't consider devices without geometry shader support
+        if (!deviceFeatures.tessellationShader) {
+            return 0;
+        }
+
+        float maxImageDimension3DWeight = 1.0f;
+        float maxMemoryAllocationCountWeight = 1.0f;
+        float maxComputeWorkGroupCountWeight = 1.0f;
+
+        float score = 0.f;
+
+        // Assign higher score to dedicated GPUs
+        if (deviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU) {
+            score += 5.f;
+        }
+
+        score += static_cast<double>(deviceProperties.limits.maxImageDimension2D) / 32768.f * 1.0f;
+        score += static_cast<double>(deviceProperties.limits.maxImageDimension3D) / 4096 * 1.0f;
+        score += static_cast<double>(deviceProperties.limits.maxMemoryAllocationCount) / 4294967296 * 1.0f;
+        
+        return score;
     }
 
     void WindowManager::createLogicalDevice() {

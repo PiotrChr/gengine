@@ -9,6 +9,7 @@
 #if _IS_MAC
     #include <mach-o/dyld.h>
 #endif
+#include "../gfx/ImageLoader.hpp"
 
 namespace Gengine {
     class AssetManager {
@@ -16,7 +17,7 @@ namespace Gengine {
         AssetManager();
         ~AssetManager();
 
-        void loadTexture(std::string name, std::string filePath);
+        void loadTexture(const std::string name, const std::string filePath);
         VkImage& getTexture(std::string name);
 
         void loadFont(std::string name, std::string filePath);
