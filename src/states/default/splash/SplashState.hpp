@@ -12,13 +12,13 @@ namespace Gengine {
         SplashState(GameComponentsRef data) : BaseState(data) {};
         ~SplashState() {};
         void init();
-        void handleInput(sf::Event event);
+        void handleInput();
         void update(float dt);
         void draw(float dt);
         void pause();
         void resume();
     private:
-        sf::Clock _clock;
-        sf::Sprite _background;
+        // sf::Clock _clock;
+        // sf::Sprite _background;
     };
 }

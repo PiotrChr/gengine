@@ -29,7 +29,7 @@ namespace Gengine {
     }
 
     void Game::init() {
-        // _data->stateMachine.addState(StateRef(new SplashState(_data)), true);
+        _data->stateMachine.addState(StateRef(new SplashState(_data)), true);
         
         std::cout << "Initializing game..." << std::endl;
 
@@ -50,7 +50,9 @@ namespace Gengine {
         float accumulator = 0.0f;
 
         while(this->isRunning()) {
+            // this->_data->stateMachine.processStateChanges();
             glfwPollEvents();
+            this->_data->inputManager.updateMousePosition(this->_data->windowManager.window);
             
         }
     }

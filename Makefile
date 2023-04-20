@@ -51,3 +51,6 @@ build-deb_x64:
 
 qs:
 	git add -A && git commit -m "sync" && git push origin HEAD
+
+compileShaders_mac_x64:
+	cd bin/mac_x64 && sh compileShaders.sh

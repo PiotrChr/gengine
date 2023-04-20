@@ -4,7 +4,7 @@
 #include <string>
 #include "GameComponents.hpp"
 #include "../gameManager/GameData.hpp"
-// #include "../../states/default/splash/SplashState.hpp"
+#include "../../states/default/splash/SplashState.hpp"
 
 namespace Gengine {
     class Game {

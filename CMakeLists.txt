@@ -36,9 +36,9 @@ file(GLOB SOURCES
 # "src/engine/core/object/hud/elements/LabeledDropDown.cpp"
 # "src/engine/core/object/hud/elements/GameRectangle.cpp"
 
-# "src/engine/core/state/State.hpp"
-# "src/engine/core/state/State.cpp"
-# "src/engine/core/state/StateMachine.cpp"
+"src/engine/core/state/State.hpp"
+"src/engine/core/state/State.cpp"
+"src/engine/core/state/StateMachine.cpp"
 "src/engine/core/window/WindowManager.cpp"
 # "src/engine/core/world/generator/WorldGenerator.cpp"
 # "src/engine/core/world/generator/CaveGenerator.cpp"
@@ -49,8 +49,8 @@ file(GLOB SOURCES
 "src/engine/core/save/SettingsLoader.cpp"
 # "src/engine/core/audio/AudioManager.cpp"
 
-# "src/states/BaseState.cpp"
-# "src/states/default/splash/SplashState.cpp"
+"src/states/BaseState.cpp"
+"src/states/default/splash/SplashState.cpp"
 # "src/states/default/mainMenu/MainMenuState.cpp"
 # "src/states/default/quit/QuitState.cpp"
 # "src/states/game/BaseGameState.cpp"

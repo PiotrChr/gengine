@@ -7,4 +7,5 @@ build/
 include/
 frameworks/
 lib/
-/tmp
+tmp
+resouces/compiledShaders
