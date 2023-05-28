@@ -16,8 +16,8 @@ namespace Gengine {
         bool isActionTriggered(std::string actionName);
         glm::vec2 getMousePosition();
         void updateMousePosition(GLFWwindow* window);
-        std::map<std::string, int> keyBinds;
-        std::map<std::string, int> mouseBinds;
+        std::map<std::string, std::string> keyBinds;
+        std::map<std::string, std::string> mouseBinds;
     private:
         glm::vec2 mousePosition;
     };

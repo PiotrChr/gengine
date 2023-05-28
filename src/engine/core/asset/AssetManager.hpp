@@ -9,7 +9,7 @@
 #if _IS_MAC
     #include <mach-o/dyld.h>
 #endif
-#include "../gfx/ImageLoader.hpp"
+// #include "../gfx/ImageLoader.hpp"
 
 namespace Gengine {
     class AssetManager {

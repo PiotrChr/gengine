@@ -71,7 +71,23 @@
 			"cmath": "cpp",
 			"unordered_map": "cpp",
 			"unordered_set": "cpp",
-			"filesystem": "cpp"
+			"filesystem": "cpp",
+			"array": "cpp",
+			"bit": "cpp",
+			"cfenv": "cpp",
+			"charconv": "cpp",
+			"complex": "cpp",
+			"csignal": "cpp",
+			"format": "cpp",
+			"list": "cpp",
+			"numeric": "cpp",
+			"random": "cpp",
+			"ranges": "cpp",
+			"span": "cpp",
+			"strstream": "cpp",
+			"typeindex": "cpp",
+			"valarray": "cpp",
+			"algorithm": "cpp"
 		}
 	}
 }

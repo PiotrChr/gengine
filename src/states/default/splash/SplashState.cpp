@@ -1,5 +1,5 @@
 #include "SplashState.hpp"
-#include "../mainMenu/MainMenuState.hpp"
+
 
 namespace Gengine {
     void SplashState::init() {

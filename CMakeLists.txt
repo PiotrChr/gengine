@@ -19,11 +19,11 @@ file(GLOB SOURCES
 "src/engine/utils/window.cpp"
 "src/engine/gameManager/GameManager.cpp"
 "src/engine/game/Game.cpp"
-"src/engine/core/gfx/ImageLoader.cpp"
 "src/engine/core/gfx/stb_image_implementation.cpp"
-"src/engine/core/gfx/BlockRenderer.cpp"
-"src/engine/core/gfx/Cube.cpp"
-# "src/engine/core/gfx/Shader.cpp"
+"src/engine/core/gfx/device/Device.cpp"
+"src/engine/core/gfx/pipeline/Pipeline.cpp"
+"src/engine/core/gfx/swapChain/SwapChain.cpp"
+"src/engine/core/gfx/window/Window.cpp"
 "src/engine/core/audio/AudioManager.cpp"
 "src/engine/core/asset/AssetManager.cpp"
 "src/engine/core/input/InputManager.cpp"
@@ -75,10 +75,13 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY
   ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
 
+find_package(Vulkan REQUIRED)
+include_directories(${Vulkan_INCLUDE_DIRS})
+
 if(TARGET_MAC)
     set(LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/lib/mac_x64/")
-    set(MOLTENVK_LIBRARY "${LIB_DIR}/libMoltenVK.dylib")
-    set(FRAMEWORKS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/frameworks/")
+    # set(MOLTENVK_LIBRARY "${LIB_DIR}/libMoltenVK.dylib")
+    # set(FRAMEWORKS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/frameworks/")
     set(INCLUDES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include/mac_x64/")
 elseif(TARGET_WIN)
     set (LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/lib/win_x64")
@@ -105,6 +108,7 @@ if (TARGET_MAC)
         MACOSX_BUNDLE_BUNDLE_NAME ${PROJECT_NAME}
         MACOSX_BUNDLE_BUNDLE_VERSION "0.1"
         MACOSX_BUNDLE_SHORT_VERSION_STRING "0.1"
+        RESOURCE "${GLFW_LIBRARY}"
         MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/cmake/gengine.plist.in
     )
 else()
@@ -112,14 +116,12 @@ else()
 endif()
 
 if (TARGET_MAC)
-    target_link_libraries(${PROJECT_NAME} "${LIB_DIR}/libMoltenVK.dylib")
     target_link_libraries(${PROJECT_NAME} "-framework CoreGraphics" "-framework Foundation")
-    target_link_libraries(${PROJECT_NAME} ${MOLTENVK_LIB_DIRS})
 endif()
 
 target_link_libraries(${PROJECT_NAME} "${LIB_DIR}/libglfw.3.3.dylib")
 target_link_libraries(${PROJECT_NAME} "${LIB_DIR}/libfreetype.6.dylib")
-
+target_link_libraries(${PROJECT_NAME} ${Vulkan_LIBRARIES})
 if(!TARGET_MAC)
     install(
         TARGETS ${PROJECT_NAME}

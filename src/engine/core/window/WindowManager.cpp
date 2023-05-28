@@ -1,12 +1,6 @@
 #include "WindowManager.hpp"
 
 namespace Gengine {
-    WindowManager::~WindowManager() {
-        cleanupVulkan();
-        glfwDestroyWindow(window);
-        glfwTerminate();
-    }
-    
     void WindowManager::setResolution(std::string resolution, bool fullscreen) {    
         this->resolution = resolution;
 
@@ -14,9 +8,13 @@ namespace Gengine {
         
         width = extent.width;
         height = extent.height;
-
+        
         if (fullscreen) {
             isFullscreen = true;
+        }
+
+        if (window != nullptr) {
+            window->setResolution(width, height);
         }
     }
 
@@ -24,155 +22,28 @@ namespace Gengine {
         isFullscreen = fullscreen;
     }
 
-    void WindowManager::initGLFW() {
-        if (!glfwInit()) {
-            throw std::runtime_error("Failed to initialize GLFW");
-        }
-
-        #if _IS_MAC
-            /* We need to explicitly ask for a 3.2 context on OS X */
-            glfwWindowHint (GLFW_CONTEXT_VERSION_MAJOR, 3);
-            glfwWindowHint (GLFW_CONTEXT_VERSION_MINOR, 2);
-            glfwWindowHint (GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-            glfwWindowHint (GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        #endif
-
-        glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-    }
-
-    GLFWAPI GLFWwindow* WindowManager::createWindow() {
-        if (isFullscreen) {
-            return glfwCreateWindow(width, height, title.c_str(), glfwGetPrimaryMonitor(), nullptr);
-        } else {
-            return glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
-        }
-    }
-    
     void WindowManager::init() {
-        try {
-            this->initGLFW();
-        } catch (const std::exception& e) {
-            std::cerr << e.what() << std::endl;
-            glfwTerminate();
-        }
+        window = new Window(width, height, title);
+        window->initWindow();
 
-        window = this->createWindow();
+        device = new Device(*window);
+        swapChain = new SwapChain(*device, window->getExtent());
+    }
 
-        if (!window) {
-            glfwTerminate();
-            throw std::runtime_error("Failed to create GLFW window");
-        }
+    Window& WindowManager::getWindow() {
+        return *window;
+    }
 
-        glfwMakeContextCurrent(window);
-
-        try {
-            initVulkan();
-        } catch (const std::exception& e) {
-            std::cerr << e.what() << std::endl;
-            glfwDestroyWindow(window);
-            glfwTerminate();
-        }
+    GLFWwindow* WindowManager::getGLFWWindow() {
+        return window->getWindow();
     }
 
     void WindowManager::cleanup() {
-        this->cleanupVulkan();
-        vkDestroyInstance(instance, nullptr);
-        glfwDestroyWindow(window);
-        glfwTerminate();
-    }
-
-    void WindowManager::initVulkan() {
-        createInstance();
-        pickPhysicalDevice();
-        // createLogicalDevice();
-        // createSwapChain();
-    }
-
-    void WindowManager::pickPhysicalDevice() {
-        uint32_t deviceCount = 0;
-        vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
-
-        if (deviceCount == 0) {
-            throw std::runtime_error("Failed to find GPUs with Vulkan support!");
-        }
-
-        std::vector<VkPhysicalDevice> devices(deviceCount);
-        vkEnumeratePhysicalDevices(instance, &deviceCount, devices.data());
-
-        // Use an ordered map to automatically sort devices by score
-        std::multimap<int, VkPhysicalDevice> candidates;
-
-        for (const auto& device : devices) {
-            int score = rateDeviceSuitability(device);
-            candidates.insert(std::make_pair(score, device));
-        }
-
-        // Check if the best candidate is suitable at all
-        if (candidates.rbegin()->first > 0) {
-            _physicalDevice = candidates.rbegin()->second;
-        } else {
-            throw std::runtime_error("Failed to find a suitable GPU!");
-        }
-    }
-
-    VkPhysicalDeviceFeatures WindowManager::gertPhysicalDeviceFeatures(VkPhysicalDevice device) {
-        VkPhysicalDeviceFeatures deviceFeatures;
-        vkGetPhysicalDeviceFeatures(device, &deviceFeatures);
-
-        return deviceFeatures;
-    }
-
-    VkPhysicalDeviceProperties WindowManager::getPhysicalDeviceProperties(VkPhysicalDevice device) {
-        VkPhysicalDeviceProperties deviceProperties;
-        vkGetPhysicalDeviceProperties(device, &deviceProperties);
-
-        return deviceProperties;
-    }
-
-    int WindowManager::rateDeviceSuitability(VkPhysicalDevice device) {
-        VkPhysicalDeviceProperties deviceProperties = getPhysicalDeviceProperties(device);
-        VkPhysicalDeviceFeatures deviceFeatures = gertPhysicalDeviceFeatures(device);
         
-        // Don't consider devices without geometry shader support
-        if (!deviceFeatures.tessellationShader) {
-            return 0;
-        }
-
-        float maxImageDimension3DWeight = 1.0f;
-        float maxMemoryAllocationCountWeight = 1.0f;
-        float maxComputeWorkGroupCountWeight = 1.0f;
-
-        float score = 0.f;
-
-        // Assign higher score to dedicated GPUs
-        if (deviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU) {
-            score += 5.f;
-        }
-
-        score += static_cast<double>(deviceProperties.limits.maxImageDimension2D) / 32768.f * 1.0f;
-        score += static_cast<double>(deviceProperties.limits.maxImageDimension3D) / 4096 * 1.0f;
-        score += static_cast<double>(deviceProperties.limits.maxMemoryAllocationCount) / 4294967296 * 1.0f;
-        
-        return score;
-    }
-
-    void WindowManager::createLogicalDevice() {
-        // Add code to create a logical device, queues, and other required resources.
-        // ...
-    }
-
-    void WindowManager::createSwapChain() {
-        // Add code to create a swap chain that suits your needs.
-        // ...
-    }
-
-    void WindowManager::cleanupVulkan() {
-        // Cleanup Vulkan resources
     }
 
     bool WindowManager::isOpen() {
-        return !glfwWindowShouldClose(window);
+        return !window->shouldClose();
     }
 
     void WindowManager::changeMode() {
@@ -191,9 +62,9 @@ namespace Gengine {
         return std::to_string(extent.width) + "x" + std::to_string(extent.height);
     }
 
-     VkExtent2D WindowManager::stringToExtent(std::string extent) {
-        std::string width = "";
-        std::string height = "";
+    VkExtent2D WindowManager::stringToExtent(std::string extent) {
+        std::string _width = "";
+        std::string _height = "";
         bool isWidth = true;
         for (int i = 0; i < extent.length(); i++) {
             if (extent[i] == 'x') {
@@ -201,72 +72,17 @@ namespace Gengine {
                 continue;
             }
             if (isWidth) {
-                width += extent[i];
+                _width += extent[i];
             }
             else {
-                height += extent[i];
+                _height += extent[i];
             }
         }
         
-        uint32_t w = std::stoul(width);
-        uint32_t h = std::stoul(height);
+        uint32_t w = std::stoul(_width);
+        uint32_t h = std::stoul(_height);
 
         return VkExtent2D{w, h};
-    }
-
-    void WindowManager::createInstance() {
-        VkApplicationInfo appInfo = {};
-        appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-        appInfo.pApplicationName = "Gengine";
-        appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
-        appInfo.pEngineName = "No Engine";
-        appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
-        appInfo.apiVersion = VK_API_VERSION_1_2;
-
-        VkInstanceCreateInfo createInfo = {};
-        createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-        createInfo.pApplicationInfo = &appInfo;
-
-        uint32_t glfwExtensionCount = 0;
-        const char** glfwExtensions;
-        glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
-        
-        // Check if the required extensions are available
-        uint32_t availableExtensionCount = 0;
-        vkEnumerateInstanceExtensionProperties(nullptr, &availableExtensionCount, nullptr);
-        std::vector<VkExtensionProperties> availableExtensions(availableExtensionCount);
-        vkEnumerateInstanceExtensionProperties(nullptr, &availableExtensionCount, availableExtensions.data());
-
-        bool allExtensionsFound = true;
-        for (uint32_t i = 0; i < glfwExtensionCount; ++i) {
-            bool extensionFound = false;
-            for (const auto& availableExtension : availableExtensions) {
-                if (strcmp(glfwExtensions[i], availableExtension.extensionName) == 0) {
-                    extensionFound = true;
-                    break;
-                }
-            }
-            if (!extensionFound) {
-                allExtensionsFound = false;
-                break;
-            }
-        }
-
-        if (!allExtensionsFound) {
-            throw std::runtime_error("Failed to find required Vulkan extensions!");
-        }
-
-        createInfo.enabledExtensionCount = glfwExtensionCount;
-        createInfo.ppEnabledExtensionNames = glfwExtensions;
-
-        createInfo.enabledLayerCount = 0;
-
-        int creationSuccess = vkCreateInstance(&createInfo, nullptr, &instance);
-
-        if (creationSuccess != VK_SUCCESS) {
-            throw std::runtime_error("Failed to create Vulkan instance.");
-        }
-
     }
 
     std::string WindowManager::getResolution() {

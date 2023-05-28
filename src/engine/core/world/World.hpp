@@ -6,7 +6,6 @@
 #include "BlockTypes.hpp"
 #include "loader/WorldLoader.hpp"
 #include "../../../gameObjects/player/Player.hpp"
-#include "../gfx/BlockRenderer.hpp"
 #include <map>
 
 namespace Gengine {
@@ -47,7 +46,7 @@ namespace Gengine {
         std::vector<std::pair<Chunk*, float>> getSortedChunks();
         bool isBlockVisible (const glm::ivec3& blockPosition);
 
-        const glm::ivec3& getPlayerChunkPosition();
+        glm::ivec3 getPlayerChunkPosition();
 
         bool isInWorldHeightBounds(int z);
         bool isWithinLoadRadius(int dx, int dy, int dz);
@@ -69,8 +68,8 @@ namespace Gengine {
         // World loader for loading and unloading chunks
         WorldLoader m_worldLoader;
 
-        // Block renderer for drawing blocks
-        BlockRenderer m_blockRenderer;
+        // // Block renderer for drawing blocks
+        // BlockRenderer m_blockRenderer;
 
         // Players in the world
         std::vector<Player*> m_players;

@@ -5,7 +5,6 @@ namespace Gengine {
         _res_w = gameData.width;
         _res_h = gameData.height;
         _title = gameData.title;
-
     }
 
     Game::~Game() {
@@ -52,7 +51,7 @@ namespace Gengine {
         while(this->isRunning()) {
             // this->_data->stateMachine.processStateChanges();
             glfwPollEvents();
-            this->_data->inputManager.updateMousePosition(this->_data->windowManager.window);
+            this->_data->inputManager.updateMousePosition(this->_data->windowManager.getGLFWWindow());
             
         }
     }

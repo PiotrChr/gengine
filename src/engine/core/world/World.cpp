@@ -1,10 +1,10 @@
 #include "World.hpp"
 
 namespace Gengine {
-    const glm::ivec3& World::getPlayerChunkPosition() {
-        Player* player = m_players[0];
-        
-        return player->getChunkPosition();
+    const glm::ivec3 initialPlayerPosition = glm::ivec3(0, 0, 0);
+
+    glm::ivec3 World::getPlayerChunkPosition() {
+        return m_players[0] != nullptr ? m_players[0]->getChunkPosition() : initialPlayerPosition;
     }
 
     World::~World() {
@@ -16,7 +16,7 @@ namespace Gengine {
     }
 
     void World::init() {
-        m_blockRenderer.init();
+        // m_blockRenderer.init();
     }
 
     void World::addPlayer(Player* player) {

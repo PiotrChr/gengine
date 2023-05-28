@@ -60,48 +60,48 @@ namespace Gengine {
                 // loads key bindings
                 else if (key == ACTION_MOVE_UP)
                 {
-                    _data->inputManager.keyBinds[ACTION_MOVE_UP] = std::stoi(value);
+                    _data->inputManager.keyBinds[ACTION_MOVE_UP] = value;
                 }
                 else if (key == ACTION_MOVE_DOWN)
                 {
-                    _data->inputManager.keyBinds[ACTION_MOVE_DOWN] = std::stoi(value);
+                    _data->inputManager.keyBinds[ACTION_MOVE_DOWN] = value;
                 }
                 else if (key == ACTION_MOVE_LEFT)
                 {
-                    _data->inputManager.keyBinds[ACTION_MOVE_LEFT] = std::stoi(value);
+                    _data->inputManager.keyBinds[ACTION_MOVE_LEFT] = value;
                 }
                 else if (key == ACTION_MOVE_RIGHT)
                 {
-                    _data->inputManager.keyBinds[ACTION_MOVE_RIGHT] = std::stoi(value);
+                    _data->inputManager.keyBinds[ACTION_MOVE_RIGHT] = value;
                 }
                 else if (key == ACTION_INTERACT)
                 {
-                    _data->inputManager.keyBinds[ACTION_INTERACT] = std::stoi(value);
+                    _data->inputManager.keyBinds[ACTION_INTERACT] = value;
                 }
                 else if (key == ACTION_PAUSE)
                 {
-                    _data->inputManager.keyBinds[ACTION_PAUSE] = std::stoi(value);
+                    _data->inputManager.keyBinds[ACTION_PAUSE] = value;
                 }
                 else if (key == ACTION_INVENTORY)
                 {
-                    _data->inputManager.keyBinds[ACTION_INVENTORY] = std::stoi(value);
+                    _data->inputManager.keyBinds[ACTION_INVENTORY] = value;
                 }
                 else if (key == ACTION_ESCAPE)
                 {
-                    _data->inputManager.keyBinds[ACTION_ESCAPE] = std::stoi(value);
+                    _data->inputManager.keyBinds[ACTION_ESCAPE] = value;
                 }
                 else if (key == ACTION_DEBUG)
                 {
-                    _data->inputManager.keyBinds[ACTION_DEBUG] = std::stoi(value);
+                    _data->inputManager.keyBinds[ACTION_DEBUG] = value;
                 }
 
                 else if (key == ACTION_MAIN) {
-                    _data->inputManager.mouseBinds[ACTION_MAIN] = std::stoi(value);
+                    _data->inputManager.mouseBinds[ACTION_MAIN] = value;
                 }
                 else if (key == ACTION_SECONDARY) {
-                    _data->inputManager.mouseBinds[ACTION_SECONDARY] = std::stoi(value);
+                    _data->inputManager.mouseBinds[ACTION_SECONDARY] = value;
                 } else if (key == ACTION_TERTIARY) {
-                    _data->inputManager.mouseBinds[ACTION_TERTIARY] = std::stoi(value);
+                    _data->inputManager.mouseBinds[ACTION_TERTIARY] = value;
                 }
                 
             }

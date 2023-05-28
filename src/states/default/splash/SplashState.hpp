@@ -1,7 +1,5 @@
 #pragma once
 
-
-#include <SFML/Graphics.hpp>
 #include "../../../engine/DEFINITIONS.hpp"
 #include "../../BaseState.hpp"
 #include "../../../engine/game/GameComponents.hpp"
